@@ -6,9 +6,7 @@ bp = Blueprint('main', __name__, url_prefix='/')
 def main_page() :
     return render_template('main.html')
 
-@bp.route('/group')
-def group_page() :
-    return render_template('group.html')
+
     
 @bp.route('/Login')
 def login_page() :
