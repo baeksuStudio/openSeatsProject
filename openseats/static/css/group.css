@@ -1,37 +1,17 @@
-body, html {
-  display:flex;
-  min-height:100vh;
+main, main > .group-container {
+  margin: 0 auto
 }
 
-body,html >div {margin:auto;}
 
 .group-container {
-    margin-top: 400px;
-    display: flex;
-    flex-direction: column;
-    width: 800px;
+    /* margin-top: 400px; */
+    width: 1000px;
     margin: 0;
 }
 
-.top-navigator {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-.top-navigator > h5 {
-    margin: 0;
-}
-
-.groups {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
 
 .card {
-    margin: 10px 5px;
-
+    margin-right: 13px; 
+    margin-bottom: 10px;
+    width: 15rem;
 }
