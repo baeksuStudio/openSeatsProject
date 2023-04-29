@@ -1,0 +1,10 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-5 mt-3">
+    <h1 class="fw-bold">{{ group.name }}</h1>
+    <h6 class="fw-bold">{{ group.address }}</h6>
+    <p>{{ group.description }}</p>
+</div>
+{% endblock %}
