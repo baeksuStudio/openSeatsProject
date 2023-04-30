@@ -8,10 +8,3 @@ def main_page() :
 
 
     
-@bp.route('/SignIn')
-def SignIn_page() :
-    return render_template('sign_in.html')
-
-@bp.route('/SignUp')
-def SignUp_page() :
-    return render_template('sign_up.html')
