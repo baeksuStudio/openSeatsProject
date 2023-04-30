@@ -8,6 +8,3 @@ def main_page() :
 
 
     
-@bp.route('/Login')
-def login_page() :
-    return render_template('login.html')
