@@ -10,6 +10,7 @@ class GroupForm(FlaskForm):
     address = StringField('주소', validators=[DataRequired('주소는 필수 항목입니다.')])
     description = StringField('설명', validators=[DataRequired('설명은 필수 항목입니다.')])
     money_per_hour = StringField('시간당 금액', validators=[DataRequired('금액은 필수 항목입니다.')])
+    image = FileField('image', validators=[FileRequired('이미지 업로드는 필수 항목입니다.')])
 
 class UserCreateForm(FlaskForm):
     username = StringField('사용자이름', validators=[DataRequired('이름은 2~15자리로 지어주세요.'), Length(min=2, max=15)])

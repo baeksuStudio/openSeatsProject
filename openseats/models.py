@@ -7,6 +7,7 @@ class Group(db.Model):
     name = db.Column(db.String(200), nullable=False)
     money_per_hour = db.Column(db.Integer, nullable=False)
     create_date = db.Column(db.DateTime(), nullable=False)
+    image_path = db.Column(db.String(200), nullable=False)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
