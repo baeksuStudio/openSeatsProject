@@ -1,1 +1,5 @@
-__pycache__/*.pyc
+.idea
+openseats.db
+*.pyc
+__pycache__
+migrations

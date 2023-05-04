@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, request
 from datetime import datetime
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename, redirect
 from openseats import db
 # from __main__ import app
 from openseats.models import Group
