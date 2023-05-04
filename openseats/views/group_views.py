@@ -30,39 +30,20 @@ def detail_page(group_id):
 def create():
     form = GroupForm()
     if request.method == 'POST' and form.validate_on_submit():
+        # image handle
+        file = form.image.data
+        filename = secure_filename(file.filename)
         group = Group(
             name=form.name.data, 
             address=form.address.data, 
             description=form.description.data, 
             money_per_hour=int(form.money_per_hour.data), 
-            create_date=datetime.now()
+            create_date=datetime.now(),
+            image_path=filename
             )
+        file.save('openseats/static/img/' + filename)
         db.session.add(group)
         db.session.commit()
         return redirect(url_for('group.main_page'))
     return render_template('group/group_create.html', form=form)
    
-@bp.route('/img', methods=['GET', 'POST'])
-def upload_image():
-    form = ImageForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        file = form.image.data
-        filename = secure_filename(file.filename)
-      
-        # PP_ROOT = os.path.dirname(os.path.abspath(__file__))
-        # UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static', 'img')
-        # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-        # In controller save the file with desired name
-        # full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        # file.save(full_filename)
-
-
-        # original
-
-        file.save('openseats/static/img/' + filename)
-        return render_template('group/group_look_img.html', image='img/' + filename)
-    return render_template('group/group_img.html', form=form)
-
-
-
