@@ -33,7 +33,7 @@
                   </div>
                 </div>
                 <div class="d-grid mb-3">
-                  <button type="submit" class="btn btn-primary" id="registerBtn" disabled>가입하기</button>
+                  <button type="submit" class="btn btn-primary" id="registerBtn">가입하기</button>
                 </div>
                 <div class="text-center">
                   이미 계정이 있으신가요? <a href="{{ url_for('auth.SignIn_page') }}">로그인</a>
@@ -45,7 +45,6 @@
       </div>
     </div>
 </main>
-<script src="{{ url_for('static', filename='js/password_confirm.js') }}"></script>
 
 {% endblock %}
 
