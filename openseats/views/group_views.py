@@ -41,6 +41,7 @@ def create():
             create_date=datetime.now(),
             image_path=filename
             )
+        os.makedirs(dir_path, exists_ok=True)
         file.save('openseats/static/img/' + filename)
         db.session.add(group)
         db.session.commit()

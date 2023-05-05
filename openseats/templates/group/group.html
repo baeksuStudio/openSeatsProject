@@ -35,7 +35,7 @@
             {% if group_list %}
                 {% for group in group_list %}
                 <div class="card mr-10 mb-3">
-                    <img src="{{ url_for('static', filename='img/' + group.image_path) }}" class="card-img-top" alt="..."style="background-color: #dedede; width: 100%; height: 150px;">
+                    <img src="{{ url_for('static', filename='/img/{}'.format(group.image_path)) }}" class="card-img-top" alt="..."style="background-color: #dedede; width: 100%; height: 150px;">
                     <div class="card-body">
                         <h5 class="card-title mb-2" style="font-size: 17px">{{ group.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary" style="font-size: 14px;">{{ group.address }}</h6>
