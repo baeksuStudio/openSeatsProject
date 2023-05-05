@@ -26,6 +26,12 @@ def detail_page(group_id):
     # image = file = os.path.join(path, '.png')
     return render_template('group/group_detail.html', group=group)
 
+@bp.route('/detail/<int:group_id>/join')
+def group_join(group_id):
+    
+    return redirect(url_for('group.detail_page'))
+
+
 @bp.route('/create/', methods=('GET', 'POST'))
 def create():
     form = GroupForm()

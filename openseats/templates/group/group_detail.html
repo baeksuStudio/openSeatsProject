@@ -7,5 +7,7 @@
     <h6 class="fw-bold mt-3">{{ group.address }}</h6>
     <img src="{{ image }}" >
     <p>{{ group.description }}</p>
+
+    <a href="{{ url_for('group.detail_page', group_id=group.id) }}" class="btn btn-primary">가입하기</a>
 </div>
 {% endblock %}

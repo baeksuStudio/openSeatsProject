@@ -11,7 +11,7 @@
                 <h3 class="text-center mb-4">로그인</h3>
                 <form method="post">
                   {{ form.csrf_token }}
-                  {% include "form_errors.html" %}
+                  {% include "auth/form_errors.html" %}
                   <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="email" name="email" placeholder="이메일" value="{{form.email.data or ''}}">
                     <label for="floatingInput">이메일</label>
