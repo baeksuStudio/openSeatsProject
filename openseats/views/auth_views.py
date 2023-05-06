@@ -23,25 +23,36 @@ def SignIn_page() :
         if error is None:
             session.clear()
             session['user_id'] = user.id
+            session['login_success'] = True
             return redirect(url_for('main.main_page'))
         flash(error)
-    return render_template('sign_in.html', form=form)
+    return render_template('auth/sign_in.html', form=form)
 
 @bp.route('/SignUp', methods=('GET', 'POST'))
 def SignUp_page() :
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        user_email = User.query.filter_by(email=form.email.data).first()
         if not user:
-            user = User(username=form.username.data,
-                    password=generate_password_hash(form.password1.data),
-                    email=form.email.data)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('main.main_page'))
+            if not user_email :
+                user = User(username=form.username.data,
+                        password=generate_password_hash(form.password1.data),
+                        email=form.email.data,
+                        userID='')
+                db.session.add(user)
+                db.session.commit()
+                eindex = user.email.find('@')
+                user.userID = user.email[:eindex]
+                db.session.commit()
+                
+                return redirect(url_for('main.main_page'))
+            else :
+                flash('이미 존재하는 사용자 이메일 입니다.')
         else:
-            flash('이미 존재하는 사용자입니다.')
-    return render_template('sign_up.html', form=form)
+            flash('이미 존재하는 사용자 이름 입니다.')
+        
+    return render_template('auth/sign_up.html', form=form)
 
 @bp.route('/logout/')
 def logout():
@@ -55,3 +66,4 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.query.get(user_id)
+    print(session)

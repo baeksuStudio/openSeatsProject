@@ -1,0 +1,12 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - my page{% endblock %}
+
+
+{% block content %}
+{% if g.user %}
+
+
+{% else %}
+<h1>로그인이 필요합니다!</h1>
+{% endif %}
+{% endblock %}
