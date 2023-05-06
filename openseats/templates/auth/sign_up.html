@@ -1,0 +1,50 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Login page{% endblock %}
+
+{% block content %}
+
+<main>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="text-center mb-4">회원가입</h3>
+              <form method="post">
+                {{ form.csrf_token }}
+                {% include "auth/form_errors.html" %}
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="username" name="username" placeholder="이름" value="{{ form.username.data or '' }}">
+                  <label for="username">이름</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control" id="email" name="email" placeholder="이메일" value="{{ form.email.data or '' }}">
+                  <label for="email">이메일</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="password1" name="password1" placeholder="비밀번호" value="{{ form.password2.data or '' }}">
+                  <label for="password">비밀번호</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="password2" name="password2"placeholder="비밀번호 확인" value="{{ form.password2.data or '' }}">
+                  <label for="confirmPassword">비밀번호 확인</label>
+                  <div class="invalid-feedback">
+                    비밀번호가 일치하지 않습니다.
+                  </div>
+                </div>
+                <div class="d-grid mb-3">
+                  <button type="submit" class="btn btn-primary" id="registerBtn">가입하기</button>
+                </div>
+                <div class="text-center">
+                  이미 계정이 있으신가요? <a href="{{ url_for('auth.SignIn_page') }}">로그인</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+
+{% endblock %}
+

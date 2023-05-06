@@ -1,0 +1,40 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Login page{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-center mb-4">로그인</h3>
+                <form method="post">
+                  {{ form.csrf_token }}
+                  {% include "auth/form_errors.html" %}
+                  <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일" value="{{form.email.data or ''}}">
+                    <label for="floatingInput">이메일</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" value="{{ form.password.data or ''}}">
+                    <label for="floatingPassword">비밀번호</label>
+                  </div>
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">로그인</button>
+                  </div>
+                  <div class="text-center mt-3">
+                    <a href="#">비밀번호를 잊으셨나요?</a>
+                  </div>
+                  <div class="text-center mt-3">
+                    <a href="{{ url_for('auth.SignUp_page') }}">회원가입</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}
+

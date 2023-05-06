@@ -7,7 +7,6 @@ def main_page() :
     return render_template('main.html')
 
 
-    
-@bp.route('/Login')
-def login_page() :
-    return render_template('login.html')
+@bp.route('/<string:user_page>')
+def my_page(user_page) :
+    return render_template('mypage.html')
