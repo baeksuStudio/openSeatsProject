@@ -23,6 +23,7 @@ def SignIn_page() :
         if error is None:
             session.clear()
             session['user_id'] = user.id
+            session['login_success'] = True
             return redirect(url_for('main.main_page'))
         flash(error)
     return render_template('auth/sign_in.html', form=form)

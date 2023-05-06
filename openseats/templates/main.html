@@ -4,6 +4,27 @@
 
 {% block content %}
 {% if g.user %}
+  {% if session.pop('login_success', False) %}
+  <div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3">
+    <div class="toast-container">
+      <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">알림</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          로그인에 성공했습니다!
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function (toastEl) {
+      return new bootstrap.Toast(toastEl)
+    })
+  </script>
+  {% endif %}
   <div class="container my-5">
     <div class="row">
       <div class="col-md-12 text-center">
@@ -15,6 +36,7 @@
       </div>
     </div>
   </div>
+  
 {% else %}
   <div class="container my-5">
     <div class="row">

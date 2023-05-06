@@ -1,9 +1,5 @@
 
-<style>
-    .navbar-brand {
-    padding-left: 20px;
-}
-</style>
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid" style="padding-left: 50px; padding-right: 50px;">
@@ -15,15 +11,18 @@
         {% if g.user %}
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('group.main_page')}}">Group</a>
+              <a class="nav-link active" id="group" aria-current="page" href="{{url_for('group.main_page')}}">Group</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('group.create')}}">Create Group</a>
+              <a class="nav-link active" id="create_group" aria-current="page" href="{{url_for('group.create')}}">Create Group</a>
             </li>
+
+            <li><a class="nav-link active" id="mobile_mypage" href="{{ url_for('main.my_page', user_page=g.user.userID) }}">내 페이지</a></li>
+            <li><a class="nav-link active" id="mobile_logout"href="{{url_for('auth.logout')}}">로그아웃</a></li>
           </ul>
-        <li class="nav-item" style="list-style: none">
+          <li class="nav-item" style="list-style: none">
             <div class="dropdown">
-              <a href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="list-style: none">
+              <a id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="list-style: none">
                 <img class="rounded-circle" src="{{ url_for('static', filename='/img/profile/default_profile.png') }}" alt="your-image-alt" width="40" height="40">
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -35,11 +34,15 @@
           </li>
           
           {% else %}
-          <ul class="navbar-nav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('auth.SignIn_page')}}">Login</a>
+              <a class="nav-link active" id="group" aria-current="page" href="#">about</a>
             </li>
           </ul>
+          <li class="nav-item" style="list-style: none">
+            <a class="nav-link" id="login_button" aria-current="page" href="{{url_for('auth.SignIn_page')}}">Login</a>
+          </li>
+
         
         {% endif %}
       </div>
