@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, current_app
+from flask import Blueprint, render_template, url_for, request, current_app, g
 from datetime import datetime
 from werkzeug.utils import secure_filename, redirect
 from openseats import db
@@ -36,6 +36,7 @@ def create():
             address=form.address.data, 
             description=form.description.data, 
             money_per_hour=int(form.money_per_hour.data), 
+            user=g.user
             )
         db.session.add(group)
         db.session.commit()

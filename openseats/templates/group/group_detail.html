@@ -61,6 +61,10 @@
                 <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px;">그룹 정보</h3>
                 <p>{{ group.description }}</p>
             </div>
+            <div class="description" style="margin-left:3px;">
+                <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px;">그룹 관리자</h3>
+                <p>{{group.user.username}} ({{ group.user.email }})</p>
+            </div>
         </div>
     </div>
 </div>
