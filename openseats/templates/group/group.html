@@ -7,7 +7,7 @@
     .card {
         margin-right: 13px; 
         margin-bottom: 10px;
-        width: 15rem;
+        width: 17rem;
     }
     .placeholder {
         content: "";
@@ -15,6 +15,11 @@
         width: 150px;
         height: 1em;
         background-color: #dedede;
+    }
+    .word-limit {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 </style>
 
@@ -35,17 +40,18 @@
             {% if group_list %}
                 {% for group in group_list %}
                 <div class="card mr-10 mb-3">
-                    <img src="{{ url_for('static', filename='img/' + group.image_path) }}" class="card-img-top" alt="..."style="background-color: #dedede; width: 100%; height: 150px;">
+                    <img src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].path)) }}" class="card-img-top" alt="..."style="background-color: #dedede; width: 100%; height: 180px;">
                     <div class="card-body">
-                        <h5 class="card-title mb-2" style="font-size: 17px">{{ group.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary" style="font-size: 14px;">{{ group.address }}</h6>
-                        <p class="card-text" style="font-size: 13px">₩{{ group.money_per_hour }} /1시간</p>
-                        <a href="{{ url_for('group.detail_page', group_id=group.id) }}" class="btn btn-primary">예약하기</a>
+                        <h5 class="card-title mb-2 word-limit" style="font-size: 17px">{{ group.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary word-limit" style="font-size: 14px; color: #474747;">{{ group.address }}</h6>
+                        <h6 class="card-subtitle mb-2 text-body-secondary word-limit" style="font-size: 14px;">★ 4.96 (160)</h6>
+                        <p class="card-text mb-2" style="font-size: 13px">₩{{ group.money_per_hour }} /1시간</p>
+                        <a href="{{ url_for('group.detail_page', group_id=group.id) }}" class="btn btn-primary">확인하기</a>
                     </div>
                 </div>
                 {% endfor %}
                 <!-- Fill the blank box -->
-                {% if groups|length % 3 != 0 %}
+                <!-- {% if groups|length % 3 != 0 %}
                     {% for i in range(0, 3 - groups|length % 3) %}
                         <div class="card mr-10 mb-3">
                             <div class="card-img-top" style="background-color: #dedede; width: 100%; height: 133px;"></div>
@@ -56,7 +62,7 @@
                             </div>
                         </div>
                     {% endfor %}
-                {% endif %}
+                {% endif %} -->
                 <!-- End Filling -->
 
             {% else %}
