@@ -21,7 +21,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     userID = db.Column(db.String(50), unique=True, nullable=False)
 
-    groups = db.relationship('Group', backref='group')
+    groups = db.relationship('Group', backref='user_set')
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,9 +33,9 @@ class Group(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
     
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
-    user = db.relationship('User', backref=db.backref('user'))
+    user = db.relationship('User', backref=db.backref('group_set'))
     
-    images = db.relationship('Image', backref='group', lazy=True)
+    images = db.relationship('Image', backref='group_set', lazy=True)
 
 
 class Image(db.Model):
@@ -45,6 +45,7 @@ class Image(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+
 
 # https://sqlalchemy-imageattach.readthedocs.io/en/1.0.0/guide/context.html#thumbnails
 

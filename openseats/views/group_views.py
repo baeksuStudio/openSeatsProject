@@ -55,7 +55,7 @@ def create():
             image_file.save(path)
 
             
-            image = Image(name=filename, path=filename, group_id=group.id)
+            image = Image(name=filename, path=path, group_id=group.id)
             db.session.add(image)
 
         db.session.commit()

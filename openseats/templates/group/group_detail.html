@@ -1,71 +1,116 @@
-{% extends 'basic/base.html' %}
-{% block title %}Openseats - {{ group.name }}{% endblock %}
-
-{% block content %}
+{% extends 'basic/base.html' %} {% block title %}Openseats - {{ group.name }}{%
+endblock %} {% block content %}
 <style>
-    .info {
-        min-width: 550px;
-        margin: 0 20px
-    }
+  .info {
+    min-width: 550px;
+    margin: 0 20px;
+  }
 
-    .banner_img {
-        min-width: 550px;
-        height: 400px;
-    }
+  .banner_img:parent {
+    width: 550px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff; /* 부모 요소의 배경색을 흰색으로 설정 */
+  }
+
+  .banner_img {
+    min-width: 550px;
+    height: auto;
+    max-height: 400px;
+  }
 </style>
 
 <div class="container mt-5" style="padding: 0 80px">
-    <div class="d-flex flex-sm-row flex-column">
-        <div style="max-width:550px; max-height:400px !important;">
-            <div id="carouselExampleIndicators" class="carousel slide" data-interval="false">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    {% for i in range(group.images|length) %}
-                        {% if i != 0%}
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{i}}" aria-label="Slide {{i}}"></button>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].path)) }}" class="d-block w-100 banner_img" alt="...">
-                        </div>
-                        {% for i in range(group.images|length) %}
-                            {% if i != 0%}
-                                <div class="carousel-item">
-                                    <img src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id, group.images[i].path)) }}" class="d-block w-100 banner_img" alt="...">                                    </div>
-                            {% endif %}
-                        {% endfor %}
-                </div>
-                {% if group.images|length > 1 %}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                {% endif %}
-            </div>
+  <div class="d-flex flex-sm-row flex-column">
+    <div style="max-width: 550px; max-height: 400px !important">
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-interval="false"
+      >
+        <div class="carousel-indicators">
+          <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="0"
+            class="active"
+            aria-current="true"
+            aria-label="Slide 1"
+          ></button>
+          {% for i in range(group.images|length) %} {% if i != 0%}
+          <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="{{i}}"
+            aria-label="Slide {{i}}"
+          ></button>
+          {% endif %} {% endfor %}
         </div>
-        <div class="info">
-            <h2 class="fw-bold" style="font-size: 35px; margin-bottom: 3px;">{{ group.name }}</h2>
-            <div class="d-flex" style="margin-left: 3px; color: #5e5e5e">
-                <h6 class="fw-bold mt-2"><u>★ 4.96 (160)</u></h6>
-                <h6 class="fw-bold mt-2">&nbsp·&nbsp</h6>
-                <h6 class="fw-bold mt-2">{{ group.address }}</h6>
-            </div>
-            <div class="dropdown-divider" style="margin: 15px 0"></div>
-            <div class="description" style="margin-left:3px;">
-                <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px;">그룹 정보</h3>
-                <p>{{ group.description }}</p>
-            </div>
-            <div class="description" style="margin-left:3px;">
-                <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px;">그룹 관리자</h3>
-                <p>{{group.user.username}} ({{ group.user.email }})</p>
-            </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].name)) }}"
+              class="d-block w-100 banner_img"
+              alt="..."
+            />
+          </div>
+          {% for i in range(group.images|length) %} {% if i != 0%}
+          <div class="carousel-item">
+            <img
+              src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id, group.images[i].name)) }}"
+              class="d-block w-100 banner_img"
+              alt="..."
+            />
+          </div>
+          {% endif %} {% endfor %}
         </div>
+        {% if group.images|length > 1 %}
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        {% endif %}
+      </div>
     </div>
+    <div class="info">
+      <h2 class="fw-bold" style="font-size: 35px; margin-bottom: 3px">
+        {{ group.name }}
+      </h2>
+      <div class="d-flex" style="margin-left: 3px; color: #5e5e5e">
+        <h6 class="fw-bold mt-2"><u>★ 4.96 (160)</u></h6>
+        <h6 class="fw-bold mt-2">&nbsp·&nbsp</h6>
+        <h6 class="fw-bold mt-2">{{ group.address }}</h6>
+      </div>
+      <div class="dropdown-divider" style="margin: 15px 0"></div>
+      <div class="description" style="margin-left: 3px">
+        <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px">
+          그룹 정보
+        </h3>
+        <p>{{ group.description }}</p>
+      </div>
+      <div class="description" style="margin-left: 3px">
+        <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px">
+          그룹 관리자
+        </h3>
+        <p>{{group.user.username}} ({{ group.user.email }})</p>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -12,7 +12,8 @@ class GroupForm(FlaskForm):
     description = StringField('설명', validators=[DataRequired('설명은 필수 항목입니다.')])
     money_per_hour = StringField('시간당 금액', validators=[DataRequired('금액은 필수 항목입니다.')])
     # images = MultipleFileField('이미지', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only')])
-    images = MultipleFileField('Images', validators=[DataRequired('이미지 업로드는 필수 항목입니다.'), FileAllowed(['jpg', 'png', 'jpeg'], 'Image only')])
+    images = MultipleFileField('Images', validators=[DataRequired('이미지 업로드는 필수 항목입니다.'), FileAllowed(['jpg', 'png', 'jpeg'], '이미지 파일만 업로드 할 수있습니다.')])
+
 
 
 
