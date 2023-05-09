@@ -7,6 +7,8 @@ from openseats import db
 from openseats.forms import UserCreateForm, UserLoginForm
 from openseats.models import User
 
+import functools
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -24,7 +26,11 @@ def SignIn_page() :
             session.clear()
             session['user_id'] = user.id
             session['login_success'] = True
-            return redirect(url_for('main.main_page'))
+            _next = request.args.get('next', '')
+            if _next :
+                return redirect(_next)
+            else :
+                return redirect(url_for('main.main_page'))
         flash(error)
     return render_template('auth/sign_in.html', form=form)
 
@@ -67,3 +73,13 @@ def load_logged_in_user():
     else:
         g.user = User.query.get(user_id)
     print(session)
+
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None:
+            _next = request.url if request.method == 'GET' else ''
+            return redirect(url_for('auth.SignIn_page', next=_next))
+        return view(*args, **kwargs)
+    return wrapped_view
