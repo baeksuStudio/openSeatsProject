@@ -20,6 +20,7 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     userID = db.Column(db.String(50), unique=True, nullable=False)
+    userMessage = db.Column(db.String(200), unique=False, nullable=True)
 
     groups = db.relationship('Group', backref='group')
 

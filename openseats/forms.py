@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, PasswordField, EmailField, MultipleFileField
-from wtforms.validators import DataRequired, Length, EqualTo, Email
+from wtforms.validators import DataRequired, Length, EqualTo, Email, Optional
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from werkzeug.utils import secure_filename
 
@@ -17,11 +17,24 @@ class GroupForm(FlaskForm):
 
 
 class UserCreateForm(FlaskForm):
-    username = StringField('사용자이름', validators=[DataRequired('이름은 2~15자리로 지어주세요.'), Length(min=2, max=15)])
-    password1 = PasswordField('비밀번호', validators=[DataRequired(), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
-    password2 = PasswordField('비밀번호확인', validators=[DataRequired()])
-    email = EmailField('이메일', validators=[DataRequired(), Email()])
+    username = StringField('사용자이름', validators=[DataRequired(message='이름은 2~15자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])
+    email = EmailField('이메일', validators=[DataRequired(), Email(message='유효한 이메일 주소를 입력하세요')])
+    userID = StringField('유저 아이디', validators=[DataRequired(message='이름은 5~20자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=5, max=20)])
+    password1 = PasswordField('비밀번호', validators=[DataRequired(message='비밀번호를 입력해 주세요'), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
+    password2 = PasswordField('비밀번호확인', validators=[DataRequired(message='비밀번호를 입력해 주세요')])
     
+
+class UserEditForm(FlaskForm):
+    Nowpassword = PasswordField('현재 비밀번호', validators=[DataRequired(message='비밀번호를 입력해 주세요')])
+    
+    Editusername = StringField('사용자이름', validators=[DataRequired(message='이름은 2~15자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])
+    EdituserMessage = StringField('상태 메시지', validators=[Optional(), Length(message='상태 메시지는 0~50글자로 지어주세요.', min=0, max=50)])
+    Editemail = EmailField('이메일', validators=[DataRequired(), Email(message='유효한 이메일 주소를 입력하세요')])
+    EdituserID = StringField('유저 아이디', validators=[DataRequired(message='이름은 5~20자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=5, max=20)])
+    Editpassword1 = PasswordField('비밀번호', validators=[Optional(), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
+    Editpassword2 = PasswordField('비밀번호확인', validators=[Optional()])
+
+
 class UserLoginForm(FlaskForm):
     email = StringField('이메일', validators=[DataRequired(), Email()])
     password = PasswordField('비밀번호', validators=[DataRequired()])

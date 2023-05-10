@@ -40,19 +40,20 @@ def SignUp_page() :
     if request.method == 'POST' and form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         user_email = User.query.filter_by(email=form.email.data).first()
+        userID = User.query.filter_by(userID=form.userID.data).first()
         if not user:
             if not user_email :
-                user = User(username=form.username.data,
-                        password=generate_password_hash(form.password1.data),
-                        email=form.email.data,
-                        userID='')
-                db.session.add(user)
-                db.session.commit()
-                eindex = user.email.find('@')
-                user.userID = user.email[:eindex]
-                db.session.commit()
-                
-                return redirect(url_for('main.main_page'))
+                if not userID :
+                    user = User(username=form.username.data,
+                            password=generate_password_hash(form.password1.data),
+                            email=form.email.data,
+                            userID=form.userID.data)
+                    db.session.add(user)
+                    db.session.commit()
+                    
+                    return redirect(url_for('main.main_page'))
+                else :
+                    flash('이미 존재하는 사용자 아이디 입니다.')
             else :
                 flash('이미 존재하는 사용자 이메일 입니다.')
         else:

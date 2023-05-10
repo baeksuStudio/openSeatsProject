@@ -5,34 +5,57 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-5 mb-4">User 정보 수정 페이지</h1>
-    <form>
+    {% include "mypage/form_errors.html" %}
+    <form method="post">
+      {{ form.csrf_token }}
       <div class="row mb-3">
-        <label for="inputName" class="col-sm-2 col-form-label">이름</label>
+        <label for="Nowpassword" class="col-sm-2 col-form-label">현재 비밀번호<span class="text-danger">*</span></label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputName">
+          <input type="password" class="form-control" id="Nowpassword" name="Nowpassword">
+        </div>
+      </div>
+
+      <div class="mb-5"></div> <!-- 요소들 사이의 간격을 주기 위한 빈 div -->
+
+      <div class="row mb-3">
+        <label for="Editusername" class="col-sm-2 col-form-label">이름</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="Editusername" name="Editusername" value="{{ user.username }}">
         </div>
       </div>
       <div class="row mb-3">
-        <label for="inputEmail" class="col-sm-2 col-form-label">이메일</label>
+        <label for="EdituserMessage" class="col-sm-2 col-form-label">상태 메시지</label>
         <div class="col-sm-10">
-          <input type="email" class="form-control" id="inputEmail">
+          <input type="text" class="form-control" id="EdituserMessage" name="EdituserMessage">
         </div>
       </div>
       <div class="row mb-3">
-        <label for="inputPassword" class="col-sm-2 col-form-label">비밀번호</label>
+        <label for="Editemail" class="col-sm-2 col-form-label">이메일</label>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword">
+          <input type="email" class="form-control" id="Editemail" name="Editemail" value="{{ user.email }}">
         </div>
       </div>
       <div class="row mb-3">
-        <label for="inputPassword2" class="col-sm-2 col-form-label">비밀번호 확인</label>
+        <label for="EdituserID" class="col-sm-2 col-form-label">아이디</label>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword2">
+          <input type="text" class="form-control" id="EdituserID" name="EdituserID" value="{{ user.userID }}">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="Editpassword1" class="col-sm-2 col-form-label">비밀번호</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="Editpassword1" name="Editpassword1">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="Editpassword2" class="col-sm-2 col-form-label">비밀번호 확인</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="Editpassword2" name="Editpassword2">
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-sm-10 offset-sm-2">
-          <button type="submit" class="btn btn-primary">수정</button>
+          <button type="submit" class="btn btn-primary">저장</button>
         </div>
       </div>
     </form>
