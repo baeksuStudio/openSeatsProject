@@ -31,7 +31,7 @@ class UserEditForm(FlaskForm):
     EdituserMessage = StringField('상태 메시지', validators=[Optional(), Length(message='상태 메시지는 0~50글자로 지어주세요.', min=0, max=50)])
     Editemail = EmailField('이메일', validators=[DataRequired(), Email(message='유효한 이메일 주소를 입력하세요')])
     EdituserID = StringField('유저 아이디', validators=[DataRequired(message='이름은 5~20자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=5, max=20)])
-    Editpassword1 = PasswordField('비밀번호', validators=[Optional(), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
+    Editpassword1 = PasswordField('비밀번호', validators=[Optional(), EqualTo('Editpassword2', '비밀번호가 일치하지 않습니다')])
     Editpassword2 = PasswordField('비밀번호확인', validators=[Optional()])
 
 
