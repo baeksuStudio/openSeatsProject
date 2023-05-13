@@ -6,6 +6,7 @@ from werkzeug.utils import redirect
 from openseats import db
 from openseats.forms import UserCreateForm, UserLoginForm
 from openseats.models import User
+import functools
 
 import functools
 
@@ -26,10 +27,13 @@ def SignIn_page() :
             session.clear()
             session['user_id'] = user.id
             session['login_success'] = True
+            
+            # 메인페이지 말고 로그인이 필요한곳에서의 요청일 경우
             _next = request.args.get('next', '')
-            if _next :
+            if _next:
                 return redirect(_next)
-            else :
+            # redirect 가 따로 필요없는 경우 
+            else:
                 return redirect(url_for('main.main_page'))
         flash(error)
     return render_template('auth/sign_in.html', form=form)
@@ -75,7 +79,7 @@ def load_logged_in_user():
         g.user = User.query.get(user_id)
     print(session)
 
-
+#  로그인 되어있는지 확인하는 데코레이터 함수
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
