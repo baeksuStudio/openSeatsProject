@@ -1,0 +1,158 @@
+
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - {{group.name}}{% endblock %}
+
+{% block content %}
+
+<style>
+  .group-container {
+    padding: 0 30px;
+    margin-top: 50px;
+  }
+
+  .group-title {
+    margin-bottom: 20px;
+    font-size: 35px;
+  } 
+  .group-title > h1 {
+    font-weight: bold;
+    font-size: 40px;
+  }
+
+  .carousel-container {
+    max-width: 700px;
+    max-height: 500px !important;
+
+  }
+  .carousel-img{
+    width: 550px;
+    height: 400px;
+    max-width: 700px;
+    background-size: cover;
+    background-position: center center;
+    margin: 0;
+    padding: 0;
+  }
+
+
+</style>
+
+<div class="container group-container">
+	<div class="row">
+		<div class="col-md-5">
+			<div class="page-header group-title">
+				<h1>
+                    <!-- Group 타이틀 -->
+					{{ group.name }}
+				</h1>
+      <div class="d-flex" style="margin-left: 3px; color: #5e5e5e">
+        <h6 class="fw-bold mt-1">{{ group.address }}</h6>
+      </div>
+			</div>
+		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
+	<div class="row mb-5 justify-content-center">
+		<div class="col-md-7">
+			<!-- carousel 시작 -->
+            <div id="carouselExampleIndicators" class="carousel slide carousel-container" data-interval="false">
+                <div class="carousel-indicators">
+                <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1"
+                ></button>
+                {% for i in range(group.images|length) %} {% if i != 0%}
+                <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="{{i}}"
+                    aria-label="Slide {{i}}"
+                ></button>
+                {% endif %} {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img
+                    src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].name)) }}"
+                    class="d-block w-100 carousel-img"
+                    alt="..."
+                    />
+                </div>
+                {% for i in range(group.images|length) %} {% if i != 0%}
+                <div class="carousel-item">
+                    <img
+                    src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id, group.images[i].name)) }}"
+                    class="d-block w-100 carousel-img"
+                    alt="..."
+                    />
+                </div>
+                {% endif %} {% endfor %}
+                </div>
+                {% if group.images|length > 1 %}
+                <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev"
+                >
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next"
+                >
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+                </button>
+                {% endif %}
+            </div>
+            <!-- carousel 끝 -->
+		</div>
+		<div class="col-md-5">
+            <div class="div">
+                <div class="owner" style="margin-left: 3px">
+                    <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px">
+                    그룹 관리자
+                    </h3>
+                    <p>{{group.owner.username}} ({{ group.owner.email }})</p>
+                </div>
+                <div class="owner" style="margin-left: 3px">
+                    <h3 class="fw-bold" style="font-size: 20px;">
+                      그룹 멤버
+                    </h3>
+                </div>
+                <div class="div" style="margin-bottom: 10px;">
+                  {% for i in range(0, group.reservation|length) %}
+                    <p style="margin-bottom: 2px;">{{i + 1}}. {{group.reservation[i].user.username}} ({{group.reservation[i].user.email}})</p>                      {% endfor %}
+                </div>
+              <!-- 예약하기 버튼 -->
+            <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">
+              {% if is_joined %}
+              <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." disabled>
+              {% else %}
+              <input class="btn btn-primary" type="submit" value="가입신청">
+              {% endif %}
+            </form>
+            </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-7">
+			<h2>
+				그룹 설명
+			</h2>
+			<p>{{ group.description }}</p>
+		</div>
+		<div class="col-md-5">
+		</div>
+	</div>
+</div>
+{% endblock %}

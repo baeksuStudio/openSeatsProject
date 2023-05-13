@@ -8,6 +8,7 @@ from markupsafe import Markup
 from collections.abc import Iterable
 
 class MultiFileAllowed(object):
+    # 파일 업로드 1개 이상 됐는지, 확장자가 맞는지 확인하는 validator
     def __init__(self, upload_set, message=None):
         self.upload_set = upload_set
         self.message = message
@@ -44,10 +45,7 @@ class GroupForm(FlaskForm):
     money_per_hour = IntegerField('시간당 금액', validators=[DataRequired()])
     # images = MultipleFileField('이미지', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only')])
     images = MultipleFileField('섬네일 이미지', validators=[InputRequired('이미지 업로드는 필수 항목입니다.'), MultiFileAllowed(['jpg', 'png', 'jpeg'], 'jpg, png, jpeg 파일만 업로드 할 수 있습니다.')])
-
-
                 
-
 class UserCreateForm(FlaskForm):
     username = StringField('사용자이름', validators=[DataRequired('이름은 2~15자리로 지어주세요.'), Length(min=2, max=15)])
     password1 = PasswordField('비밀번호', validators=[DataRequired(), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
@@ -57,4 +55,5 @@ class UserCreateForm(FlaskForm):
 class UserLoginForm(FlaskForm):
     email = StringField('이메일', validators=[DataRequired(), Email()])
     password = PasswordField('비밀번호', validators=[DataRequired()])
+
 
