@@ -1,0 +1,30 @@
+.navbar-brand {
+    padding-left: 20px;
+}
+
+#navbarDropdown {
+    display: block;
+}
+
+#mobile_mypage {
+    display: none;
+}
+
+#mobile_logout {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    #navbarDropdown {
+        display: none;
+    }
+    #mobile_mypage {
+        display: block;
+    }
+    #mobile_logout {
+        display: block;
+    }
+}
+#login_button {
+    color: black !important;
+}

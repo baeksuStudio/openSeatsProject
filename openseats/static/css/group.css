@@ -5,6 +5,10 @@ main, main > .group-container {
 
 .group-container {
     /* margin-top: 400px; */
-    width: 1000px;
+    width: 1200px;
     margin: 0;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
 }
