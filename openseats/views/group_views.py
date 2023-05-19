@@ -24,7 +24,9 @@ def main_page():
 @bp.route('/detail/<int:group_id>')
 @login_required
 def detail_page(group_id): 
+    # 이미 가입되어 있는지 확인
     is_joined = False
+
     if g.user == None:
         # 회원정보가 없을 경우
         return abort(404, 'please login')
@@ -40,9 +42,7 @@ def detail_page(group_id):
             is_joined = False
             
     group = Group.query.get_or_404(group_id)
-    # return render_template('group/group_detail.html', group=group, is_joined=is_joined)
-    return render_template('book/new_group_detail.html', group=group, is_joined=is_joined)
-    # return render_template('group/n2_group_detail.html', group=group)
+    return render_template('group/group_detail.html', group=group, is_joined=is_joined)
     
 
 @bp.route('/join/<int:group_id>', methods=['POST'])
