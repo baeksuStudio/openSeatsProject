@@ -4,4 +4,4 @@ openseats.db
 __pycache__
 migrations
 .env
-uploads
+uploads/

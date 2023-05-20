@@ -87,8 +87,10 @@ def create():
         db.session.commit()
 
         # 이미지 파일 업로드
-        for image_file in request.files.getlist('images'):
-            filename = secure_filename(image_file.filename)
+        # for image_file in request.files.getlist('images'):
+        for n, image_file in enumerate(request.files.getlist('images')):
+            file_extension = os.path.splitext(image_file.filename)[1]
+            filename = secure_filename(str(n) + file_extension)
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(group.id), filename)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             image_file.save(path)
