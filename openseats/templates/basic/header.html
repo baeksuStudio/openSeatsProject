@@ -17,7 +17,7 @@
               <a class="nav-link active" id="create_group" aria-current="page" href="{{url_for('group.create')}}">Create Group</a>
             </li>
 
-            <li><a class="nav-link active" id="mobile_mypage" href="{{ url_for('main.my_page', user_page=g.user.userID) }}">내 페이지</a></li>
+            <li><a class="nav-link active" id="mobile_mypage" href="{{ url_for('main.my_page', username=g.user.userID) }}">내 페이지</a></li>
             <li><a class="nav-link active" id="mobile_logout"href="{{url_for('auth.logout')}}">로그아웃</a></li>
           </ul>
           <li class="nav-item" style="list-style: none">
@@ -26,7 +26,7 @@
                 <img class="rounded-circle" src="{{ url_for('static', filename='/img/profile/default_profile.png') }}" alt="your-image-alt" width="40" height="40">
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{{ url_for('main.my_page', user_page=g.user.userID) }}">내 페이지</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('main.my_page', username=g.user.userID) }}">내 페이지</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">로그아웃</a></li>
               </ul>

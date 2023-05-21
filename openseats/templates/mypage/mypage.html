@@ -26,7 +26,7 @@
         {% for reservation in reservations %}
         <div class="card mb-3">
             <div class="card-body">
-            <h5 class="card-title">{{ reservation.group.name }}</h5>
+            <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
             <p class="card-text">{{ reservation.group.address }}</p>
             </div>
             <div class="card-footer text-muted">

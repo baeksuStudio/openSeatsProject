@@ -34,9 +34,13 @@ def detail_page(group_id):
         # 회원정보 있을 경우
         user = User.query.get(g.user.id)
         group = Group.query.get(group_id)
+
+        # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
+        joined_reservations = Reservation.query.filter_by(user_id=user.id, group_id=group.id).first()
+
         if not user or not group:
             abort(404, '유져와 그룹 정보가 없습니다.')
-        if user.reservation and group.reservation:
+        if joined_reservations:
             is_joined = True
         else:
             is_joined = False
