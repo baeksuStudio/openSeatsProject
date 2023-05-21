@@ -56,6 +56,7 @@
 	<div class="row mb-5 justify-content-center">
 		<div class="col-md-7">
 			<!-- carousel 시작 -->
+      {% if group.images %}
             <div id="carouselExampleIndicators" class="carousel slide carousel-container" data-interval="false">
                 <div class="carousel-indicators">
                 <button
@@ -114,7 +115,10 @@
                 </button>
                 {% endif %}
             </div>
-            <!-- carousel 끝 -->
+      {% else %}
+            <div style="background-color: gray">이미지 없음</div>
+      {% endif %}
+      <!-- carousel 끝 -->
 		</div>
 		<div class="col-md-5">
             <div class="div">

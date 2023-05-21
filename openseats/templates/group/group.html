@@ -40,14 +40,18 @@ endblock %} {% block content %}
 
     <!-- group list -->
     <div class="groups d-flex justify-content-center flex-wrap">
-      {% if group_list %} {% for group in group_list %}
+      {% if group_list %} {% for group in group_list.items %}
       <div class="card mr-10 mb-3">
-        <img
-          src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].name)) }}"
-          class="card-img-top"
-          alt="..."
-          style="background-color: #dedede; width: 100%; height: 180px"
-        />
+        {% if group.images %}
+          <img
+            src="{{ url_for('static', filename='/uploads/img/{}/{}'.format(group.id ,group.images[0].name)) }}"
+            class="card-img-top"
+            alt="..."
+            style="background-color: #dedede; width: 100%; height: 180px"
+          />
+        {% else %}
+          <div class="card-img-top" style="background-color: #dedede; width: 100%; height: 133px;"></div>
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title mb-2 word-limit" style="font-size: 17px">
             {{ group.name }}
@@ -94,6 +98,50 @@ endblock %} {% block content %}
       <h1>No any result</h1>
       {% endif %}
     </div>
+        <!-- 페이징처리 시작 -->
+        <ul class="pagination justify-content-center">
+            <!-- 이전페이지 -->
+            <!-- 이전 페이지가 더 있을경우 -->
+            {% if group_list.has_prev %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ group_list.prev_num }}">이전</a>
+              </li>
+              <!-- 없을 경우 이전버튼 비활성화 -->
+              {% else %}
+              <li class="page-item disabled">
+                  <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">이전</a>
+              </li>
+              {% endif %}
+            <!-- 페이지번호 -->
+            {% for page_num in group_list.iter_pages() %}
+              {% if page_num %}
+                {% if page_num != group_list.page %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                  </li>
+                  {% else %}
+                  <li class="page-item active" aria-current="page">
+                      <a class="page-link" href="javascript:void(0)">{{ page_num }}</a>
+                  </li>
+                {% endif %}
+              {% else %}
+                <li class="disabled">
+                    <a class="page-link" href="javascript:void(0)">...</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if group_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ group_list.next_num }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+      <!-- 페이징처리 끝 -->
   </div>
 </main>
 {% endblock %}
