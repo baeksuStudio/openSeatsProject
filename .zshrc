@@ -1,0 +1,1 @@
+alias openseats='export FLASK_APP=pybo;export FLASK_DEBUG=true; cd /Users/parkhanbaek/Desktop/openseats/openSeatsGitTest/openseats;source /Users/parkhanbaek/Desktop/openseats/openSeatsGitTest/openseats/bin/activate'

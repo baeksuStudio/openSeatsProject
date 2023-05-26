@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, abort, request, flash, url_for
-from werkzeug.utils import redirect
+from flask import Blueprint, render_template, abort, request, flash, url_for, current_app
+from werkzeug.utils import redirect, secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+
+import os
 
 from openseats import db
 
@@ -34,7 +36,6 @@ def my_page_edit(user_page) :
             now_password_error = '현재 비밀번호가 올바르지 않습니다.'
 
         if now_password_error is None :
-            flash_message = []
             Edituser_username = User.query.filter_by(username=form.Editusername.data).first()
             Edituser_email = User.query.filter_by(email=form.Editemail.data).first()
             Edituser_userID = User.query.filter_by(userID=form.EdituserID.data).first()
@@ -50,6 +51,15 @@ def my_page_edit(user_page) :
                             user.email = form.Editemail.data
                             user.userID = form.EdituserID.data
                             user.userMessage = form.EdituserMessage.data
+
+                            photo = form.photoUpload.data
+                            print(photo)
+                            if photo :
+                                filename = secure_filename(photo.filename)
+                                path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
+                                os.makedirs(os.path.dirname(path), exist_ok=True)
+                                photo.save(path)
+                                print('저장')
                             db.session.commit()
 
                             return redirect(url_for('auth.logout'))
@@ -58,18 +68,25 @@ def my_page_edit(user_page) :
                             user.email = form.Editemail.data
                             user.userID = form.EdituserID.data
                             user.userMessage = form.EdituserMessage.data
+
+                            photo = form.photoUpload.data
+                            print(photo)
+                            if photo :
+                                filename = secure_filename(photo.filename)
+                                path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
+                                os.makedirs(os.path.dirname(path), exist_ok=True)
+                                photo.save(path)
+                                print('저장')
                             db.session.commit()
                         
                             return redirect(url_for('main.my_page', user_page=user.userID))
                     else :
-                        flash_message.append('이미 존재하는 사용자 아이디 입니다.')
+                        flash('이미 존재하는 사용자 아이디 입니다.')
                 else :
-                    flash_message.append('이미 존재하는 사용자 이메일 입니다.')
+                    flash('이미 존재하는 사용자 이메일 입니다.')
             else:
-                flash_message.append('이미 존재하는 사용자 이름 입니다.')
+                flash('이미 존재하는 사용자 이름 입니다.')
 
-            if flash_message :
-                flash_list(flash_message)
 
         else :
             flash(now_password_error)

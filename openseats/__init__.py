@@ -24,6 +24,7 @@ def create_app() :
     # 파일 저장 경로 설정
     basedir = os.path.abspath(os.path.dirname(__file__))
     app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'uploads', 'img')
+    app.config['USER_PROFILE'] = os.path.join(basedir, 'static', 'img', 'profile')
 
     # ORM
     db.init_app(app)

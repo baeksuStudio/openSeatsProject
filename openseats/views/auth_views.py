@@ -39,31 +39,36 @@ def SignIn_page() :
     return render_template('auth/sign_in.html', form=form)
 
 @bp.route('/SignUp', methods=('GET', 'POST'))
-def SignUp_page() :
+def SignUp_page():
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        user_email = User.query.filter_by(email=form.email.data).first()
-        userID = User.query.filter_by(userID=form.userID.data).first()
-        if not user:
-            if not user_email :
-                if not userID :
+        user = User.query.filter(User.username == form.username.data).first()
+        user_email = User.query.filter(User.email == form.email.data).first()
+        userID = User.query.filter(User.userID == form.userID.data).first()
+        print(form.username.data, user)
+        print(form.email.data, user_email)
+        print(form.userID.data, userID)
+        if user == None :
+            if user_email == None :
+                if userID == None :
                     user = User(username=form.username.data,
-                            password=generate_password_hash(form.password1.data),
-                            email=form.email.data,
-                            userID=form.userID.data)
+                                password=generate_password_hash(form.password1.data),
+                                email=form.email.data,
+                                userID=form.userID.data,
+                                userMessage='')
                     db.session.add(user)
                     db.session.commit()
                     
                     return redirect(url_for('main.main_page'))
-                else :
+                else:
                     flash('이미 존재하는 사용자 아이디 입니다.')
-            else :
+            else:
                 flash('이미 존재하는 사용자 이메일 입니다.')
         else:
             flash('이미 존재하는 사용자 이름 입니다.')
         
     return render_template('auth/sign_up.html', form=form)
+
 
 @bp.route('/logout/')
 def logout():

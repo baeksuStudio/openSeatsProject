@@ -65,6 +65,10 @@ class UserEditForm(FlaskForm):
     Editpassword1 = PasswordField('비밀번호', validators=[Optional(), EqualTo('Editpassword2', '비밀번호가 일치하지 않습니다')])
     Editpassword2 = PasswordField('비밀번호확인', validators=[Optional()])
 
+    photoUpload = FileField('사진 업로드', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+
+
+
 
 class UserLoginForm(FlaskForm):
     email = StringField('이메일', validators=[DataRequired(), Email()])
