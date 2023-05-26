@@ -5,3 +5,5 @@ __pycache__
 migrations
 .env
 uploads
+bin
+lib
