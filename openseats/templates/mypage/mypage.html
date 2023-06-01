@@ -9,7 +9,7 @@
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-body">
-                <img src="{{ url_for('static', filename='/img/profile/default_profile.png') }}" class="img-fluid rounded-circle mb-3" alt="프로필 사진">
+                <img src="{{ g.user_profile_path }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="100" height="100">
                 <h5 class="card-title">{{ user.username }}</h5>
                 <p class="card-text">{{ user.email }}</p>
                 <p class="card-text">{{ user.userMessage }}</p>
@@ -18,7 +18,6 @@
                 <a href="{{ url_for('main.my_page_edit',  user_page=g.user.userID) }}" class="btn btn-primary">프로필 수정</a>
                 {% endif %}
             </div>
-
         </div>
         <div class="col-md-8">
         <h2>가입중인 그룹 목록</h2>

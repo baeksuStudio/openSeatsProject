@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort, request, flash, url_for, current_app
-from werkzeug.utils import redirect, secure_filename
+from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import os
@@ -53,13 +53,11 @@ def my_page_edit(user_page) :
                             user.userMessage = form.EdituserMessage.data
 
                             photo = form.photoUpload.data
-                            print(photo)
                             if photo :
-                                filename = secure_filename(photo.filename)
+                                filename = 'profile'
                                 path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
                                 os.makedirs(os.path.dirname(path), exist_ok=True)
                                 photo.save(path)
-                                print('저장')
                             db.session.commit()
 
                             return redirect(url_for('auth.logout'))
@@ -70,13 +68,11 @@ def my_page_edit(user_page) :
                             user.userMessage = form.EdituserMessage.data
 
                             photo = form.photoUpload.data
-                            print(photo)
                             if photo :
-                                filename = secure_filename(photo.filename)
+                                filename = 'profile.png'
                                 path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
                                 os.makedirs(os.path.dirname(path), exist_ok=True)
                                 photo.save(path)
-                                print('저장')
                             db.session.commit()
                         
                             return redirect(url_for('main.my_page', user_page=user.userID))
