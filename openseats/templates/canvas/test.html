@@ -1,0 +1,36 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Canvas Test{% endblock %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <!DOCTYPE html>
+
+    <link rel="stylesheet" type="text/css" href=" {{ url_for('static', filename='css/batchGUI.css') }} ">
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/batchGUI.js') }} "></script>
+    <body>
+      <div id="container">
+        <div id="sidebar">
+          <div class="btn-group mb-3" role="group">
+            <button id="add-object-btn" type="button" class="btn btn-primary">객체 추가</button>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="selected-object" data-bs-toggle="dropdown" aria-expanded="false">
+                선택된 객체
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="selected-object">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="canvas">
+
+        </div>
+      </div>
+    
+    </body>
+
+    
+</html>
+
+{% endblock %}

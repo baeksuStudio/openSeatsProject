@@ -61,7 +61,7 @@ def join(group_id):
         if user.reservation and group.reservation:
             return redirect(url_for('group.detail_page', group_id=group_id))   
         else:
-            reservation = Reservation(user_id=user.id, group_id=group_id)
+            reservation = Reservation(user_id=g.user.id, group_id=group_id)
             db.session.add(reservation)
             db.session.commit()
             return redirect(url_for('group.detail_page', group_id=group_id))

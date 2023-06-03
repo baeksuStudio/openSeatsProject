@@ -51,7 +51,8 @@ def SignUp_page() :
                     user = User(username=form.username.data,
                             password=generate_password_hash(form.password1.data),
                             email=form.email.data,
-                            userID=form.userID.data)
+                            userID=form.userID.data,
+                            userMessage='')
                     db.session.add(user)
                     db.session.commit()
                     
