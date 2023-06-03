@@ -6,7 +6,7 @@ import os
 
 from openseats import db
 
-from openseats.models import User
+from openseats.models import User, Reservation
 from .auth_views import login_required
 from openseats.forms import UserEditForm
 
@@ -17,13 +17,14 @@ def main_page() :
     return render_template('main.html')
 
 
-@bp.route('/<string:user_page>')
-def my_page(user_page) :
-    user = User.query.filter_by(userID=user_page).first()
-    if user is None :
+@bp.route('/<string:username>')
+def my_page(username) :
+    user = User.query.filter_by(userID=username).first()
+    reservations = Reservation.query.filter_by(user_id=user.id).all()
+    if user is None:
         abort(404)
     else :
-        return render_template('mypage/mypage.html', user=user)
+        return render_template('mypage/mypage.html', user=user, reservations=reservations)
 
 @bp.route('/<string:user_page>/edit', methods=('GET', 'POST'))
 @login_required

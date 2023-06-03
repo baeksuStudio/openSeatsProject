@@ -22,14 +22,14 @@
         <div class="col-md-8">
         <h2>가입중인 그룹 목록</h2>
         <hr>
-        {% for post in range(10) %}
+        {% for reservation in reservations %}
         <div class="card mb-3">
             <div class="card-body">
-            <h5 class="card-title">title</h5>
-            <p class="card-text">그룹예시</p>
+            <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
+            <p class="card-text">{{ reservation.group.address }}</p>
             </div>
             <div class="card-footer text-muted">
-                예시
+                {{ reservation.group.description }}
             </div>
         </div>
         {% endfor %}

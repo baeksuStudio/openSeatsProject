@@ -4,6 +4,7 @@ openseats.db
 __pycache__
 migrations
 .env
-uploads
 bin
 lib
+uploads/
+profile/
