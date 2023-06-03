@@ -1,0 +1,42 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - my page{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                <img src="{{ g.user_profile_path }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="100" height="100">
+                <h5 class="card-title">{{ user.username }}</h5>
+                <p class="card-text">{{ user.email }}</p>
+                <p class="card-text">{{ user.userMessage }}</p>
+                </div>
+                {% if g.user.id == user.id %}
+                <a href="{{ url_for('main.my_page_edit',  user_page=g.user.userID) }}" class="btn btn-primary">프로필 수정</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-8">
+        <h2>가입중인 그룹 목록</h2>
+        <hr>
+        {% for reservation in reservations %}
+        <div class="card mb-3">
+            <div class="card-body">
+            <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
+            <p class="card-text">{{ reservation.group.address }}</p>
+            </div>
+            <div class="card-footer text-muted">
+                {{ reservation.group.description }}
+            </div>
+        </div>
+        {% endfor %}
+        <a href="#" class="btn btn-primary">게시글 작성</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

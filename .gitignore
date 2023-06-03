@@ -3,3 +3,9 @@ openseats.db
 *.pyc
 __pycache__
 migrations
+.env
+bin
+lib
+uploads/
+profile/
+pyvenv.cfg
