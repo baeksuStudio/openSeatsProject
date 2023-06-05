@@ -50,7 +50,7 @@ endblock %} {% block content %}
             style="background-color: #dedede; width: 100%; height: 180px"
           />
         {% else %}
-          <div class="card-img-top" style="background-color: #dedede; width: 100%; height: 133px;"></div>
+          <div class="card-img-top" style="background-color: #dedede; width: 100%; height: 180px;"></div>
         {% endif %}
         <div class="card-body">
           <h5 class="card-title mb-2 word-limit" style="font-size: 17px">
@@ -68,9 +68,6 @@ endblock %} {% block content %}
           >
             ★ 4.96 (160)
           </h6>
-          <p class="card-text mb-2" style="font-size: 13px">
-            ₩{{ group.money_per_hour }} /1시간
-          </p>
           <a
             href="{{ url_for('group.detail_page', group_id=group.id) }}"
             class="btn btn-primary"

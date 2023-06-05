@@ -22,29 +22,24 @@
     <form method="post" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <div class="row mb-3">
-            <label for="name" class="col-sm-2 col-form-label">그룹 이름</label>
+            <label for="name" class="col-sm-2 col-form-label">그룹 이름<span class="text-danger">*</span></label>
             <div class="col-sm-10">
             <input type="text" class="form-control" id="name" name="name" value="{{ form.name.data or ''}}">
             </div>
         </div>
         <div class="row mb-3">
-            <label for="address" class="col-sm-2 col-form-label">주소</label>
+            <label for="address" class="col-sm-2 col-form-label">주소<span class="text-danger">*</span></label>
             <div class="col-sm-10">
             <input type="text" class="form-control" id="address" name="address" value="{{ form.address.data or ''}}">
             </div>
         </div>
         <div class="row mb-3">
-            <label for="description" class="col-sm-2 col-form-label">그룹 설명</label>
+            <label for="description" class="col-sm-2 col-form-label">그룹 설명<span class="text-danger">*</span></label>
             <div class="col-sm-10">
             <input type="text" class="form-control" id="description" name="description" value="{{ form.description.data or ''}}">
             </div>
         </div>
-        <div class="row mb-3">
-            <label for="money_per_hour" class="col-sm-2 col-form-label">시간당 금액</label>
-            <div class="col-sm-10">
-            <input type="text" class="form-control" id="money_per_hour" name="money_per_hour" value="{{ form.money_per_hour.data or  ''}}">
-            </div>
-        </div>
+        
         <div class="input-group mb-3">
             <label for="images" class="col-sm-2 col-form-label">썸네일 이미지</label>
             <input type="file" class="form-control" id="images" name="images" multiple>

@@ -43,9 +43,10 @@ class GroupForm(FlaskForm):
     name = StringField('제목', validators=[DataRequired('제목은 필수 항목입니다.'), Length(max=50)])
     address = StringField('주소', validators=[DataRequired('주소는 필수 항목입니다.')])
     description = StringField('설명', validators=[DataRequired('설명은 필수 항목입니다.')])
-    money_per_hour = IntegerField('시간당 금액', validators=[DataRequired()])
-    # images = MultipleFileField('이미지', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only')])
-    images = MultipleFileField('섬네일 이미지', validators=[InputRequired('이미지 업로드는 필수 항목입니다.'), MultiFileAllowed(['jpg', 'png', 'jpeg'], 'jpg, png, jpeg 파일만 업로드 할 수 있습니다.')])
+    images = MultipleFileField('이미지', validators=[FileAllowed(['jpg', 'png', 'jpeg'], '이미지 파일만 가능합니다.')])
+
+    # 최소한개의 파일을 입력받고, 여러개의 파일을 입력받고 싶을 때
+    # images = MultipleFileField('섬네일 이미지', validators=[InputRequired('이미지 업로드는 필수 항목입니다.'), MultiFileAllowed(['jpg', 'png', 'jpeg'], 'jpg, png, jpeg 파일만 업로드 할 수 있습니다.')])
                 
 class UserCreateForm(FlaskForm):
     username = StringField('사용자이름', validators=[DataRequired(message='이름은 2~15자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])

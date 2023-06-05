@@ -1,8 +1,8 @@
 .idea
-openseats.db
+.db
 *.pyc
 __pycache__
-migrations
+migrations/
 .env
 bin
 lib

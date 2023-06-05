@@ -25,7 +25,12 @@ def main_page():
 @login_required
 def detail_page(group_id): 
     # 이미 가입되어 있는지 확인
-    is_joined = False
+    status = {
+        0: 'not joined',
+        1: 'already joined',
+        2: 'owner'
+    }
+    join_status = status[0]
 
     if g.user == None:
         # 회원정보가 없을 경우
@@ -35,18 +40,19 @@ def detail_page(group_id):
         user = User.query.get(g.user.id)
         group = Group.query.get(group_id)
 
-        # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
-        joined_reservations = Reservation.query.filter_by(user_id=user.id, group_id=group.id).first()
-
         if not user or not group:
             abort(404, '유져와 그룹 정보가 없습니다.')
-        if joined_reservations:
-            is_joined = True
-        else:
-            is_joined = False
             
+        # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
+        if  Reservation.query.filter_by(user_id=user.id, group_id=group.id).first():
+            join_status = status[1]
+
+        # 이 그룹의 주인인 경우 true
+        if Group.query.filter_by(user_id=user.id, id=group.id).first():
+            join_status = status[2]
+
     group = Group.query.get_or_404(group_id)
-    return render_template('group/group_detail.html', group=group, is_joined=is_joined)
+    return render_template('group/group_detail.html', group=group, join_status=join_status)
     
 
 @bp.route('/join/<int:group_id>', methods=['POST'])
@@ -84,31 +90,30 @@ def create():
             name=form.name.data, 
             address=form.address.data, 
             description=form.description.data, 
-            money_per_hour=int(form.money_per_hour.data), 
             owner=g.user
             )
         db.session.add(group)
         db.session.commit()
 
         # 이미지 파일 업로드
-        # for image_file in request.files.getlist('images'):
-        for n, image_file in enumerate(request.files.getlist('images')):
-            file_extension = os.path.splitext(image_file.filename)[1]
-            filename = secure_filename(str(n) + file_extension)
-            path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(group.id), filename)
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            image_file.save(path)
+        if 'file' in request.files:
+            for n, image_file in enumerate(request.files.getlist('images')):
+                file_extension = os.path.splitext(image_file.filename)[1]
+                filename = secure_filename(str(n) + file_extension)
+                path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(group.id), filename)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                image_file.save(path)
 
-            
-            image = Image(name=filename, path=path, group_id=group.id)
-            db.session.add(image)
+                
+                image = Image(name=filename, path=path, group_id=group.id)
+                db.session.add(image)
 
         db.session.commit()
 
         return redirect(url_for('group.main_page'))
     return render_template('group/group_create.html', form=form)
 
-# 여러개의 group을 만들때 사용하는 테스트 함수
+# (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
 # @bp.route('/create/', methods=('GET', 'POST'))
 # @login_required
 # def create():

@@ -116,7 +116,9 @@
                 {% endif %}
             </div>
       {% else %}
-            <div style="background-color: gray">이미지 없음</div>
+            <div style="background-color: #dedede; width: 700px;" class="carousel-img d-flex justify-content-center align-items-center">
+              <div>이미지 없음</div>
+            </div>
       {% endif %}
       <!-- carousel 끝 -->
 		</div>
@@ -139,10 +141,12 @@
                 </div>
               <!-- 예약하기 버튼 -->
             <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">
-              {% if is_joined %}
+              {% if join_status == 'already joined' %}
               <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." disabled>
-              {% else %}
+              {% elif join_status == 'not joined' %}
               <input class="btn btn-primary" type="submit" value="가입신청">
+              {% elif join_status == 'owner' %}
+              <input class="btn btn-primary" type="submit" value="이 그룹의 소유자 입니다." disabled>
               {% endif %}
             </form>
             </div>
