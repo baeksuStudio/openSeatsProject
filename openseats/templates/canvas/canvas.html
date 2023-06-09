@@ -1,0 +1,27 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Main page{% endblock %}
+
+
+{% block content %}
+
+
+<style>
+    canvas {
+      border: 1px solid #999;
+      margin-top: 10px;
+    }
+  </style>
+<div>
+    <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+    
+</div>
+<body>
+    <canvas id="canvas" width="600" height="600" style="border:1px solid #ccc">
+        <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas.js') }}"></script>
+    </canvas>
+</body>
+
+
+{% endblock %}
+
+<!-- hello -->
