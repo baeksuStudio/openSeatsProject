@@ -2,15 +2,16 @@
 var canvas = new fabric.Canvas('canvas');
 canvas.setZoom(1)
     initAligningGuidelines(canvas);
-    var rect = new fabric.Rect({
+    var rect1 = new fabric.Rect({
       width: 100,
       height: 100,
       fill: 'green',
       originX:'center',
       originY:'center',
-      left:canvas.width/2 + 100,
+      left:canvas.width/2 - 100,
       top:canvas.height/2,
     });
+    canvas.add(rect1);
     var rect2 = new fabric.Rect({
       width: 100,
       height: 100,
@@ -20,36 +21,31 @@ canvas.setZoom(1)
       left:canvas.width/2 - 100,
       top:canvas.height/2,
     });
-    canvas.add(rect,rect2);
+    canvas.add(rect2);
     var rect3 = new fabric.Rect({
-        width: 100,
-        height: 100,
-        fill: 'green',
-        originX:'center',
-        originY:'center',
-        left:canvas.width/2 - 100,
-        top:canvas.height/2,
-      });
-      canvas.add(rect,rect3);
-      var rect4 = new fabric.Rect({
-        width: 100,
-        height: 100,
-        fill: 'green',
-        originX:'center',
-        originY:'center',
-        left:canvas.width/2 - 100,
-        top:canvas.height/2,
-      });
-      canvas.add(rect,rect4);
+      width: 100,
+      height: 100,
+      fill: 'green',
+      originX:'center',
+      originY:'center',
+      left:canvas.width/2 - 100,
+      top:canvas.height/2,
+    });
+    canvas.add(rect3);
+    var rect4 = new fabric.Rect({
+      width: 100,
+      height: 100,
+      fill: 'green',
+      originX:'center',
+      originY:'center',
+      left:canvas.width/2 - 100,
+      top:canvas.height/2,
+    });
+    canvas.add(rect4);
 
 canvas.zoomToPoint(new fabric.Point(canvas.width / 2, canvas.height / 2), 0.5)
 
 
-/**
- * Should objects be aligned by a bounding box?
- * [Bug] Scaled objects sometimes can not be aligned by edges
- *
- */
 function initAligningGuidelines(canvas) {
 
   var ctx = canvas.getSelectionContext(),
@@ -81,8 +77,8 @@ function initAligningGuidelines(canvas) {
     ctx.lineWidth = aligningLineWidth;
     ctx.strokeStyle = aligningLineColor;
     ctx.beginPath();
-    ctx.moveTo(((x1*zoom+viewportTransform[4])), ((y1*zoom+viewportTransform[5])));
-    ctx.lineTo(((x2*zoom+viewportTransform[4])), ((y2*zoom+viewportTransform[5])));
+    ctx.moveTo(x1*zoom+viewportTransform[4], y1*zoom+viewportTransform[5]);
+    ctx.lineTo(x2*zoom+viewportTransform[4], y2*zoom+viewportTransform[5]);
     ctx.stroke();
     ctx.restore();
   }
@@ -288,10 +284,10 @@ canvas.on('mouse:wheel', (opt) => {
     zoom = 0.2
   }
 
-  //canvas.zoomToPoint({
+  // canvas.zoomToPoint({
   //  x: opt.e.offsetX,
   //  y: opt.e.offsetY
-  //}, zoom)
+  // }, zoom)
   
   canvas.zoomToPoint(
     new fabric.Point(canvas.width / 2, canvas.height / 2),
@@ -305,3 +301,22 @@ canvas.on('mouse:wheel', (opt) => {
   
   updateInfo(canvas)
 })
+
+/*
+konva가 개쩐다 
+https://konvajs.org/docs/select_and_transform/Rotation_Snaps.html
+회전시 90도 180도 위치 맞춤기능
+
+
+https://konvajs.org/docs/select_and_transform/Basic_demo.html
+객체 드레그 후 선택 기능
+
+https://konvajs.org/docs/sandbox/Objects_Snapping.html
+위치 조절 기능
+
+https://codesandbox.io/s/react-konva-zoom-on-scroll-demo-9t7ks?file=/index.js
+줌, 드레그 기능
+
+
+
+*/
