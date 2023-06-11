@@ -19,6 +19,9 @@ def main_page() :
 @bp.route('/canvas')
 def canvas_page() :
     return render_template('canvas/canvas.html')
+@bp.route('/canvas2')
+def canvas_pag2e() :
+    return render_template('canvas/canvas2.html')
 
 @bp.route('/<string:username>')
 def my_page(username) :

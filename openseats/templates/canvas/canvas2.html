@@ -1,0 +1,17 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Main page{% endblock %}
+
+
+{% block content %}
+
+  <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
+<body>
+  <div id="konva-canvas"></div>
+  <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
+</body>
+
+
+{% endblock %}
+
+<!-- hello -->
