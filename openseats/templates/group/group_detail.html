@@ -33,13 +33,6 @@
     margin: 0;
     padding: 0;
   }
-  .card{
-  width: 300px;
-  border: none;
-  border-radius: 10px;
-   
-  background-color: #fff;
-}
 
 .stats{
 
@@ -71,16 +64,6 @@
 }
 </style>
 
-<script>
-  
-    function redirect_user_page() {
-      let element = document.getElementById('redirect_user_page');
-      element.dataset.uri;
-
-      location.href = element.dataset.uri;
-    }
-</script>
-
 <div class="container group-container">
   <div class="row">
     {%  include 'basic/flash.html' %}
@@ -100,11 +83,11 @@
 		<div class="col-md-3">
 		</div>
 	</div>
-	<div class="row mb-5 justify-content-center">
+	<div class="row mb-7 justify-content-center">
 		<div class="col-md-7">
 			<!-- carousel 시작 -->
       {% if group.images %}
-            <div id="carouselExampleIndicators" class="carousel slide carousel-container" data-interval="false">
+            <div id="carouselExampleIndicators" class="carousel slide carousel-container mb-3" data-interval="false">
                 <div class="carousel-indicators">
                 <button
                     type="button"
@@ -163,7 +146,7 @@
                 {% endif %}
             </div>
       {% else %}
-            <div style="background-color: #dedede; width: 550px;" class="carousel-img d-flex justify-content-center align-items-center">
+            <div style="background-color: #dedede; width: 650px;" class="carousel-img d-flex justify-content-center align-items-center">
               <div>이미지 없음</div>
             </div>
       {% endif %}
@@ -177,18 +160,24 @@
                     </div>
                     <div class="ml-3 w-100" style="margin-left: 10px;">
                       <h4 class="mb-0 mt-0">
-                        <a href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
+                        <a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
                       <span>{{ group.owner.email }}</span>
                     </div>
-                </div>
-                <div class="owner" style="margin-left: 3px">
-                    <h3 class="fw-bold" style="font-size: 20px;">
-                      그룹 멤버
-                    </h3>
-                </div>
-                <div class="div" style="margin-bottom: 10px;">
-                  {% for i in range(0, group.reservation|length) %}
-                    <p style="margin-bottom: 2px;">{{i + 1}}. {{group.reservation[i].user.username}} ({{group.reservation[i].user.email}})</p>                      {% endfor %}
+                </div> 
+                <div class="card" style="width: 18rem; margin-bottom: 10px;">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <h3 class="fw-bold" style="font-size: 20px;">
+                        그룹 멤버 ({{ group.reservation|length }}명)
+                      </h3>
+                    </li>
+                    {% for i in range(0, group.reservation|length) %}
+                      <li class="list-group-item d-flex my-1">
+                        <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[i].user.id) }}" class="rounded-circle d-block mb-3" style="margin-right: 7px" alt="프로필 사진" width="30" height="30">
+                        <a class="a" href="{{ url_for('main.my_page', username=group.reservation[i].user.userID)}}">{{group.reservation[i].user.username}}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
                 </div>
               <!-- 예약하기 버튼 -->
             <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">

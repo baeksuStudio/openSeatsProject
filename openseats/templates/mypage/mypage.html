@@ -27,12 +27,14 @@
                 {% if g.user.id == user.id %}
                     <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">My Groups</button>
                 {% else %}
-                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">This Owner's Groups</button>
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">This User's Groups</button>
                 {% endif %}
             </li>
             <li class="nav-item" role="presentation">
                 {% if g.user.id == user.id %}
-                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Groups I'm joining</button>
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Groups I've joined</button>
+                {% else %}
+                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">This User's joined groups</button>
                 {% endif %}
             </li>
           </ul>
@@ -42,7 +44,7 @@
                 {% for group in user.groups %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=group.id) }}">{{ group.name }}</a></h5>
+                        <h5 class="card-title" ><a class="a" href="{{ url_for('group.detail_page', group_id=group.id) }}">{{ group.name }}</a></h5>
                         <p class="card-text">{{ group.address }}</p>
                     </div>
                     <div class="card-footer text-muted">
@@ -56,7 +58,7 @@
                 {% for reservation in reservations %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
+                        <h5 class="card-title" ><a class="a" href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
                         <p class="card-text">{{ reservation.group.address }}</p>
                     </div>
                     <div class="card-footer text-muted">

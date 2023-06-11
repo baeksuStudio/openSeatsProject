@@ -51,7 +51,6 @@ def SignUp_page():
                                 password=generate_password_hash(form.password1.data),
                                 email=form.email.data,
                                 userID=form.userID.data,
-                                profile_image_name='default_profile.png',
                                 userMessage='')
                     db.session.add(user)
                     db.session.commit()
