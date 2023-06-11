@@ -20,7 +20,7 @@
   }
 
   .carousel-container {
-    max-width: 700px;
+    max-width: 701px;
     max-height: 500px !important;
 
   }
@@ -64,24 +64,6 @@
 }
 </style>
 
-<!-- Modal (가입 팝업창) -->
-<!-- <div class="modal modal-dialog modal-dialog-centered fade " id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -114,7 +96,7 @@
   <div class="row">
     {%  include 'basic/flash.html' %}
   </div>
-	<div class="row">
+	<div class="row justify-conetnet-center">
 		<div class="col-md-5">
 			<div class="page-header group-title">
 				<h1>
@@ -129,7 +111,7 @@
 		<div class="col-md-3">
 		</div>
 	</div>
-	<div class="row mb-7 justify-content-center">
+	<div class="row mb-7 ">
 		<div class="col-md-7">
 			<!-- carousel 시작 -->
       {% if group.images %}
@@ -198,19 +180,47 @@
       {% endif %}
       <!-- carousel 끝 -->
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-5 " style="width: 350px;">
             <div class="div">
-                <div class="owner container d-flex justify-content-center px-0" id="redirect_user_page onclick="redirect_user_page()" data-uri="{{ url_for('main.my_page', username=group.owner.userID) }}" style="margin-left: 0px">
+                <!-- 첫번째, 호스트 프로필 -->
+                <div class="owner container d-flex justify-content-center px-0 border-bottom mb-3 pt-3" id="redirect_user_page onclick="redirect_user_page()" data-uri="{{ url_for('main.my_page', username=group.owner.userID) }}" style="margin-left: 0px">
                     <div class="image">
                       <img src="{{ url_for('feature.get_profile_image', user_id=group.owner.id) }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="60" height="60">
                     </div>
                     <div class="ml-3 w-100" style="margin-left: 10px;">
-                      <h4 class="mb-0 mt-0">
-                        <a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
-                      <span>{{ group.owner.email }}</span>
+                      <span class="mb-2">이 그룹의 호스트</span>
+                      <!-- <span>{{ group.owner.email }}</span> -->
+                      <h5 class="mt-1"><a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h5>
                     </div>
                 </div> 
-                <div class="card" style="width: 18rem; margin-bottom: 10px;">
+                <!-- 두번째, 후기 -->
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                        후기
+                      </h3>
+                  </div>
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                        ★4.96 (126개)
+                      </h3>
+                  </div>
+                </div>
+   
+                <!-- 네번쨰 -->
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                        그룹 멤버
+                      </h3>
+                  </div>
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                       {{ group.reservation|length }}명
+                      </h3>
+                  </div>
+                </div>
+                <!-- <div class="card" style="width: 18rem; margin-bottom: 10px;">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                       <h3 class="fw-bold" style="font-size: 20px;">
@@ -225,7 +235,7 @@
                     {% endfor %}
                   </ul>
                 </div>
-              <!-- 예약하기 버튼 -->
+              <!- 예약하기 버튼 -->
             <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">
               {% if join_status == 'already joined' %}
               <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." disabled>
@@ -238,19 +248,16 @@
               {% endif %}
             </form>
             </div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-7">
-			<h2>
-				그룹 설명
-			</h2>
-			<p>{{ group.description }}</p>
-		</div>
-		<div class="col-md-5">
-		</div>
-	</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <h2>그룹 설명</h2>
+      <p>{{ group.description }}</p>
+    </div>
+    <div class="col-md-5">
+    </div>
+  </div>
 </div>
-
 
 {% endblock %}
