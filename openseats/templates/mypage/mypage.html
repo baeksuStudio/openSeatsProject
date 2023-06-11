@@ -9,7 +9,7 @@
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-body">
-                <img src="{{ g.user_profile_path }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="100" height="100">
+                <img src="{{ url_for('feature.get_profile_image', user_id=user.id) }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="100" height="100">
                 <h5 class="card-title">{{ user.username }}</h5>
                 <p class="card-text">{{ user.email }}</p>
                 <p class="card-text">{{ user.userMessage }}</p>
@@ -20,20 +20,53 @@
             </div>
         </div>
         <div class="col-md-8">
-        <h2>가입중인 그룹 목록</h2>
+        <h2>그룹 목록</h2>
         <hr>
-        {% for reservation in reservations %}
-        <div class="card mb-3">
-            <div class="card-body">
-            <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
-            <p class="card-text">{{ reservation.group.address }}</p>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                {% if g.user.id == user.id %}
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">My Groups</button>
+                {% else %}
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">This Owner's Groups</button>
+                {% endif %}
+            </li>
+            <li class="nav-item" role="presentation">
+                {% if g.user.id == user.id %}
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Groups I'm joining</button>
+                {% endif %}
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <!-- My Groups -->
+                {% for group in user.groups %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=group.id) }}">{{ group.name }}</a></h5>
+                        <p class="card-text">{{ group.address }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ group.description }}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="card-footer text-muted">
-                {{ reservation.group.description }}
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <!-- Groups I'm joining -->
+                {% for reservation in reservations %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" ><a href="{{ url_for('group.detail_page', group_id=reservation.group_id) }}">{{ reservation.group.name }}</a></h5>
+                        <p class="card-text">{{ reservation.group.address }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ reservation.group.description }}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-        <a href="#" class="btn btn-primary">게시글 작성</a>
+          </div>
+        <!-- <a href="#" class="btn btn-primary">게시글 작성</a> -->
         </div>
     </div>
 </div>

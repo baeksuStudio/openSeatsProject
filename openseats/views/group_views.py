@@ -41,7 +41,7 @@ def detail_page(group_id):
         group = Group.query.get(group_id)
 
         if not user or not group:
-            abort(404, '유져와 그룹 정보가 없습니다.')
+            flash("유저와 그룹 정보가 없습니다.", category='danger')
             
         # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
         if  Reservation.query.filter_by(user_id=user.id, group_id=group.id).first():
@@ -67,13 +67,22 @@ def join(group_id):
         user = User.query.get(g.user.id)
         group = Group.query.get(group_id)
         if not user or not group:
-            abort(404, '유져와 그룹 정보가 없습니다.')
-        if user.reservation and group.reservation:
+            flash('유저나 그룹의 정보를 찾을 수 없습니다.', category='danger')
+            return redirect(url_for('group.detail_page', group_id=group_id))   
+
+        # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
+        if Reservation.query.filter_by(user_id=user.id, group_id=group.id).first():
+            flash('이미 가입되어 있습니다.', category='danger')
+            return redirect(url_for('group.detail_page', group_id=group_id))   
+        # 이 그룹의 주인인 경우 
+        elif Group.query.filter_by(user_id=user.id, id=group.id).first():
+            flash('이 그룹의 소유자 입니다.', category='danger')
             return redirect(url_for('group.detail_page', group_id=group_id))   
         else:
             reservation = Reservation(user_id=user.id, group_id=group_id)
             db.session.add(reservation)
             db.session.commit()
+            flash('성공적으로 가입되었습니다.', category='primary')
             return redirect(url_for('group.detail_page', group_id=group_id))
     return redirect(url_for('main.main_page'))
 
@@ -96,7 +105,7 @@ def create():
         db.session.commit()
 
         # 이미지 파일 업로드
-        if 'file' in request.files:
+        if request.files.getlist('images')[0]: #이미지 파일 있을경우, 없을 시 데이터베이스 저장 X
             for n, image_file in enumerate(request.files.getlist('images')):
                 file_extension = os.path.splitext(image_file.filename)[1]
                 filename = secure_filename(str(n) + file_extension)
@@ -104,13 +113,13 @@ def create():
                 os.makedirs(os.path.dirname(path), exist_ok=True)
                 image_file.save(path)
 
-                
                 image = Image(name=filename, path=path, group_id=group.id)
                 db.session.add(image)
 
         db.session.commit()
 
-        return redirect(url_for('group.main_page'))
+        flash('성공적으로 생성되었습니다.', category='primary')
+        return redirect(url_for('group.detail_page', group_id=group.id))
     return render_template('group/group_create.html', form=form)
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수

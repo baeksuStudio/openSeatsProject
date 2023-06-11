@@ -1,0 +1,23 @@
+<!-- flash 오류 -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+    {% if category == 'danger' %}
+        <!-- 빨간색 -->
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+
+    {% elif category == 'primary' %}
+        <!-- 파란색 -->
+        <div class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+
+    {% else %}
+        <!-- 회색 -->
+        <div class="alert alert-secondary" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+{% endfor %}
+{% endwith %}

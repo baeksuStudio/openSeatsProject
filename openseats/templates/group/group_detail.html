@@ -33,11 +33,58 @@
     margin: 0;
     padding: 0;
   }
+  .card{
+  width: 300px;
+  border: none;
+  border-radius: 10px;
+   
+  background-color: #fff;
+}
 
+.stats{
 
+      background: #f2f5f8 !important;
+
+    color: #000 !important;
+}
+.articles{
+  font-size:10px;
+  color: #a1aab9;
+}
+.number1{
+  font-weight:500;
+}
+.followers{
+    font-size:10px;
+  color: #a1aab9;
+
+}
+.number2{
+  font-weight:500;
+}
+.rating{
+    font-size:10px;
+  color: #a1aab9;
+}
+.number3{
+  font-weight:500;
+}
 </style>
 
+<script>
+  
+    function redirect_user_page() {
+      let element = document.getElementById('redirect_user_page');
+      element.dataset.uri;
+
+      location.href = element.dataset.uri;
+    }
+</script>
+
 <div class="container group-container">
+  <div class="row">
+    {%  include 'basic/flash.html' %}
+  </div>
 	<div class="row">
 		<div class="col-md-5">
 			<div class="page-header group-title">
@@ -116,7 +163,7 @@
                 {% endif %}
             </div>
       {% else %}
-            <div style="background-color: #dedede; width: 700px;" class="carousel-img d-flex justify-content-center align-items-center">
+            <div style="background-color: #dedede; width: 550px;" class="carousel-img d-flex justify-content-center align-items-center">
               <div>이미지 없음</div>
             </div>
       {% endif %}
@@ -124,11 +171,15 @@
 		</div>
 		<div class="col-md-5">
             <div class="div">
-                <div class="owner" style="margin-left: 3px">
-                    <h3 class="fw-bold" style="font-size: 20px; margin-bottom: 5px">
-                    그룹 관리자
-                    </h3>
-                    <p>{{group.owner.username}} ({{ group.owner.email }})</p>
+                <div class="owner container d-flex justify-content-center px-0" id="redirect_user_page onclick="redirect_user_page()" data-uri="{{ url_for('main.my_page', username=group.owner.userID) }}" style="margin-left: 0px">
+                    <div class="image">
+                      <img src="{{ url_for('feature.get_profile_image', user_id=group.owner.id) }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="60" height="60">
+                    </div>
+                    <div class="ml-3 w-100" style="margin-left: 10px;">
+                      <h4 class="mb-0 mt-0">
+                        <a href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
+                      <span>{{ group.owner.email }}</span>
+                    </div>
                 </div>
                 <div class="owner" style="margin-left: 3px">
                     <h3 class="fw-bold" style="font-size: 20px;">

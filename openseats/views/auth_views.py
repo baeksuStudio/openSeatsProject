@@ -51,6 +51,7 @@ def SignUp_page():
                                 password=generate_password_hash(form.password1.data),
                                 email=form.email.data,
                                 userID=form.userID.data,
+                                profile_image_name='default_profile.png',
                                 userMessage='')
                     db.session.add(user)
                     db.session.commit()
@@ -77,11 +78,6 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        user_profile_path = os.path.join(current_app.config['USER_PROFILE'],str(user_id))
-        if os.path.exists(user_profile_path) :
-            g.user_profile_path = url_for('static', filename = "img/profile/{}/profile.png".format(user_id))
-        else :
-            g.user_profile_path = url_for('static', filename = "img/profile/default_profile.png")
         g.user = User.query.get(user_id)
 
 
