@@ -193,7 +193,20 @@
                       <h5 class="mt-1"><a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h5>
                     </div>
                 </div> 
-                <!-- 두번째, 후기 -->
+                <!-- 두번째, 좋아요 -->
+                <div class="d-flex justify-content-between pb-2 mb-1">
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                        좋아요
+                      </h3>
+                  </div>
+                  <div>
+                      <h3 class="" style="font-size: 20px;">
+                        1403개
+                      </h3>
+                  </div>
+                </div>
+                <!-- 세번째, 후기 -->
                 <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
                   <div>
                       <h3 class="" style="font-size: 20px;">
@@ -208,17 +221,38 @@
                 </div>
    
                 <!-- 네번쨰 -->
-                <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-3 collapse-btn" style="cursor: pointer">
                   <div>
                       <h3 class="" style="font-size: 20px;">
                         그룹 멤버
                       </h3>
                   </div>
-                  <div>
-                      <h3 class="" style="font-size: 20px;">
+                  <div class="d-flex">
+                      <h3 class="mx-2" style="font-size: 20px;">
                        {{ group.reservation|length }}명
                       </h3>
                   </div>
+                </div>
+                <!-- 그룹 멤버 collapse -->
+                <!-- toggle guider -->
+                <!-- https://stackoverflow.com/questions/16224636/twitter-bootstrap-collapse-change-display-of-toggle-button -->
+                <div class="collapse" id="collapse">
+                  {% for i in range(0, group.reservation|length) %}
+                  {% if i == group.reservation|length - 1 %}
+                  <div class="d-flex border-bottom pb-2 mb-3">
+                  {% else %}
+                  <div class="d-flex pb-2 mb-1">
+                  {% endif %}
+                    <div>
+                        <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[i].user.id) }}" class="rounded-circle d-block mb-2" style="margin-right: 3px" alt="프로필 사진" width="30" height="30">
+                    </div>
+                    <div class="d-flex">
+                        <a class="a" class="fw-bold" href="{{ url_for('main.my_page', username=group.reservation[i].user.userID)}}">
+                          <h3 class="mx-2" style="font-size: 20px;">{{group.reservation[i].user.username}}</h3>
+                        </a>
+                    </div>
+                  </div>
+                  {% endfor %}
                 </div>
                 <!-- <div class="card" style="width: 18rem; margin-bottom: 10px;">
                   <ul class="list-group list-group-flush">
@@ -238,13 +272,13 @@
               <!- 예약하기 버튼 -->
             <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">
               {% if join_status == 'already joined' %}
-              <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." disabled>
+              <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." style="width: 100%" disabled>
               {% elif join_status == 'not joined' %}
               <!-- <input class="btn btn-primary" type="submit" value="가입신청"> -->
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="myInput">가입신청</button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="myInput" style="width: 100%">가입신청</button>
 
               {% elif join_status == 'owner' %}
-              <input class="btn btn-primary" type="submit" value="이 그룹의 소유자 입니다." disabled>
+              <input class="btn btn-primary" type="submit" style="width: 100%" value="이 그룹의 소유자 입니다." disabled>
               {% endif %}
             </form>
             </div>
@@ -260,4 +294,12 @@
   </div>
 </div>
 
+<script>
+  $('.collapse-btn').click(function(){ //you can give id or class name here for $('button')
+    const bsCollapse = new bootstrap.Collapse('#collapse', {
+    toggle: false
+    })
+    bsCollapse.toggle()
+});
+</script>
 {% endblock %}
