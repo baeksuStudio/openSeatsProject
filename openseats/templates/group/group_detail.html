@@ -62,6 +62,8 @@
 .number3{
   font-weight:500;
 }
+
+
 </style>
 
 
@@ -185,12 +187,12 @@
                 <!-- 첫번째, 호스트 프로필 -->
                 <div class="owner container d-flex justify-content-center px-0 border-bottom mb-3 pt-3" id="redirect_user_page onclick="redirect_user_page()" data-uri="{{ url_for('main.my_page', username=group.owner.userID) }}" style="margin-left: 0px">
                     <div class="image">
-                      <img src="{{ url_for('feature.get_profile_image', user_id=group.owner.id) }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="60" height="60">
+                      <img src="{{ url_for('feature.get_profile_image', user_id=group.owner.id) }}" class="rounded-circle mx-auto d-block mb-3" alt="프로필 사진" width="65" height="65">
                     </div>
                     <div class="ml-3 w-100" style="margin-left: 10px;">
                       <span class="mb-2">이 그룹의 호스트</span>
                       <!-- <span>{{ group.owner.email }}</span> -->
-                      <h5 class="mt-1"><a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h5>
+                      <h4 class="mt-1"><a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
                     </div>
                 </div> 
                 <!-- 두번째, 좋아요 -->
@@ -254,22 +256,8 @@
                   </div>
                   {% endfor %}
                 </div>
-                <!-- <div class="card" style="width: 18rem; margin-bottom: 10px;">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <h3 class="fw-bold" style="font-size: 20px;">
-                        그룹 멤버 ({{ group.reservation|length }}명)
-                      </h3>
-                    </li>
-                    {% for i in range(0, group.reservation|length) %}
-                      <li class="list-group-item d-flex my-1">
-                        <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[i].user.id) }}" class="rounded-circle d-block mb-3" style="margin-right: 7px" alt="프로필 사진" width="30" height="30">
-                        <a class="a" class="fw-bold" href="{{ url_for('main.my_page', username=group.reservation[i].user.userID)}}">{{group.reservation[i].user.username}}</a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              <!- 예약하기 버튼 -->
+
+            <!-- <!- 예약하기 버튼 --> 
             <form method="POST" action="{{ url_for('group.join', group_id=group.id, user_id=g.user.id) }}">
               {% if join_status == 'already joined' %}
               <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." style="width: 100%" disabled>
@@ -286,20 +274,63 @@
   </div>
   <div class="row">
     <div class="col-md-7">
-      <h2>그룹 설명</h2>
-      <p>{{ group.description }}</p>
-    </div>
+
+      <!-- Tab -->
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">그룹 설명</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">리뷰</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">커뮤니티</a>
+        </li>
+      </ul>
+
+      <div class="tab-content border-top pt-2" style="font-size: 20px" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <!-- First content -->
+          <p>{{ group.description }}</p>
+        </div>
+        <div class="tab-pane fade  " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <!-- Second content -->
+          <div class="review d-flex flex-column my-2 py-2">
+            <div class="review-profile d-flex mb-1">
+              <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[0].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+              <div class="review-name d-flex justify-content-between" style="width: 100%;">
+                <div class="d-flex flex-column"><h5 class="mb-0">YoonSu Won</h5><p class="mb-0" style="font-size: 15px;">★4.5 | 2023-06-13</p></div>
+                <div>
+                  <input class="btn btn-primary" style="font-size: 15px" type="submit" value="수정하기">
+                  <input class="btn btn-danger" style="font-size: 15px" type="submit" value="삭제하기">
+                </div>
+              </div>
+            </div>
+            <div class="review-detail">
+              <p style="font-size: 16px">Hello my name is yunsuwon. I'm trying to tell you what is advantage of staying here.
+              Hello my name is yunsuwon. I'm trying to tell you what is advantage of staying here.</p>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+        </div>
     <div class="col-md-5">
     </div>
   </div>
 </div>
 
 <script>
-  $('.collapse-btn').click(function(){ //you can give id or class name here for $('button')
-    const bsCollapse = new bootstrap.Collapse('#collapse', {
+  // 콜랩스 버튼 클릭시
+  $('.collapse-btn').click(function(){ 
+
+    // get the collapse element
+    const myCollapse = new bootstrap.Collapse('#collapse', {
     toggle: false
     })
-    bsCollapse.toggle()
+    // 토글하기
+    myCollapse.toggle()
 });
+
+
 </script>
 {% endblock %}
