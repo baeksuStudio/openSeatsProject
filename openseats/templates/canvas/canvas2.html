@@ -4,12 +4,22 @@
 
 {% block content %}
 
-  <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+<script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
-<body>
-  <div id="konva-canvas"></div>
-  <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
-</body>
+
+<div class="container-fluid">
+  <div class="row">
+    <div id="side-space" class="col-md-2">
+      <!-- Sidebar content here -->
+      <!-- You can add your sidebar elements inside this div -->
+    </div>
+    <div id="work-space" class="col-md-10">
+      <!-- Konva canvas container -->
+      <div id="konva-canvas"></div>
+      <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}

@@ -1,7 +1,7 @@
 // first we need to create a stage
 
-var width = window.innerWidth;
-var height = window.innerHeight;
+var width = 1000
+var height = 1000
 var GUIDELINE_OFFSET = 5;
 var stage = new Konva.Stage({
   container: 'konva-canvas',   // id of container <div>
@@ -69,18 +69,28 @@ var tr = new Konva.Transformer({
 });
 layer.add(tr);
 
+tr.on('transformstart', function() {
+  console.log(tr.nodes())
+});
+
+var trGroup = new Konva.Group();
+
+layer.add(trGroup)
+
+
 // add a new feature, lets add ability to draw selection rectangle
 var selectionRectangle = new Konva.Rect({
   fill: 'rgba(0,0,255,0.5)',
-  name: 'selectObject',
   visible: false,
 });
+
 layer.add(selectionRectangle);
-var is_dragobject = false
+
+
 var x1, y1, x2, y2;
 stage.on('mousedown touchstart', (e) => {
   // do nothing if we mousedown on any shape
-  is_dragobject = false
+
   if (e.target !== stage) {
     return;
   }
@@ -113,6 +123,7 @@ stage.on('mousemove touchmove', (e) => {
 });
 
 stage.on('mouseup touchend', (e) => {
+
   // do nothing if we didn't start selection
   if (!selectionRectangle.visible()) {
     return;
@@ -128,7 +139,8 @@ stage.on('mouseup touchend', (e) => {
   var selected = shapes.filter((shape) =>
     Konva.Util.haveIntersection(selectBox, shape.getClientRect())
   );
-  is_dragobject = true
+  
+  
   tr.nodes(selected);
 });
 
@@ -142,7 +154,7 @@ stage.on('click tap', function (e) {
 
   // if click on empty area - remove all selections
   if (e.target === stage) {
-    is_dragobject = false
+
     tr.nodes([]);
     return;
   }
@@ -163,10 +175,12 @@ stage.on('click tap', function (e) {
   } else if (metaPressed && isSelected) {
     // if we pressed keys and node was selected
     // we need to remove it from selection:
+
     const nodes = tr.nodes().slice(); // use slice to have new copy of array
     // remove node from array
     nodes.splice(nodes.indexOf(e.target), 1);
     tr.nodes(nodes);
+    
   } else if (metaPressed && !isSelected) {
     // add the node into selection
     const nodes = tr.nodes().concat([e.target]);
@@ -338,6 +352,12 @@ function drawGuides(guides) {
 }
 
 layer.on('dragmove', function (e) {
+
+  // 만약 여러 객체가 선택되어 있으면 가이드 라인을 그리지 않음
+  var selectedNodes = tr.nodes();
+  if (selectedNodes.length > 1) {
+    return;
+  }
   // clear all previous lines on the screen
   layer.find('.guid-line').forEach((l) => l.destroy());
 
@@ -345,7 +365,6 @@ layer.on('dragmove', function (e) {
   var lineGuideStops = getLineGuideStops(e.target);
   // find snapping points of current object
   var itemBounds = getObjectSnappingEdges(e.target);
-
   // now find where can we snap current object
   var guides = getGuides(lineGuideStops, itemBounds);
 
