@@ -1,24 +1,81 @@
-// first we need to create a stage
+// 화면구성
+var container = document.querySelector('#work-space');
 
-var width = 1000
-var height = 1000
+var WIDTH = 3000;
+var HEIGHT = 2000;
+var MUMBER = 200;
+
+
 var GUIDELINE_OFFSET = 5;
 var stage = new Konva.Stage({
   container: 'konva-canvas',   // id of container <div>
-  width: width,
-  height: height
+  width: WIDTH,
+  height: HEIGHT,
 });
 
 // then create layer
 var layer = new Konva.Layer();
 
 // create our shape
+var addObjectBtn = document.getElementById('add-object-btn');
+addObjectBtn.addEventListener('click', function() {
+  var selectElement = document.querySelector('.side-space-menubar select');
+  var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+  
+  var objectNameInput = document.getElementById('input-object-name');
+  var objectName = objectNameInput.value;
+  
+  var colorInput = document.getElementById('color-input');
+  var color = colorInput.value;
+  
+  var objectWidthInput = document.getElementById('input-object-width');
+  var objectWidth = Number(objectWidthInput.value);
+
+  var objectHeightInput = document.getElementById('input-object-height');
+  var objectHeight = Number(objectHeightInput.value);
+
+  console.log(selectElement);
+  console.log('선택된 모양:', selectedOption);
+  console.log(objectNameInput);
+  console.log('객체 이름:', objectName);
+  console.log(colorInput);
+  console.log('선택된 색:', color);
+
+  console.log(objectWidth);
+  console.log(objectHeight);
+  
+  
+  var group = new Konva.Group({
+    name: 'object',
+    draggable: true
+  });
+
+  group.add(
+    new Konva.Rect({
+    x: 100,
+    y: 100,
+    width: objectWidth,
+    height: objectHeight,
+    fill: color,
+    }),
+    new Konva.Text({
+      x: 100,
+      y: 100,
+      text: objectName,
+      fontSize: 20,
+      fill: 'white',
+    }));
+
+    layer.add(group)
+
+});
+
 var rect = new Konva.Rect({
   x: stage.width() / 2,
   y: stage.height() / 2,
   width: 100,
   height: 100,
-  fill: 'green',
+  fill: '#563d7c',
   name: 'object',
   draggable: true
 });
@@ -59,8 +116,6 @@ layer.add(rect4);
 // add the layer to the stage
 stage.add(layer);
 
-// draw the image
-layer.draw();
 
 
 var tr = new Konva.Transformer({
@@ -69,18 +124,10 @@ var tr = new Konva.Transformer({
 });
 layer.add(tr);
 
-tr.on('transformstart', function() {
-  console.log(tr.nodes())
-});
-
-var trGroup = new Konva.Group();
-
-layer.add(trGroup)
-
 
 // add a new feature, lets add ability to draw selection rectangle
 var selectionRectangle = new Konva.Rect({
-  fill: 'rgba(0,0,255,0.5)',
+  fill: 'rgba(0,255,100,0.5)',
   visible: false,
 });
 
@@ -355,7 +402,7 @@ layer.on('dragmove', function (e) {
 
   // 만약 여러 객체가 선택되어 있으면 가이드 라인을 그리지 않음
   var selectedNodes = tr.nodes();
-  if (selectedNodes.length > 1) {
+  if (selectedNodes.length >= 1) {
     return;
   }
   // clear all previous lines on the screen
@@ -427,3 +474,4 @@ layer.on('dragend', function (e) {
   // clear all previous lines on the screen
   layer.find('.guid-line').forEach((l) => l.destroy());
 });
+
