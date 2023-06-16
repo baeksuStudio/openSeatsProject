@@ -295,7 +295,10 @@
         </div>
         <div class="tab-pane fade  " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           <!-- Second content -->
-          <div class="review d-flex flex-column my-2 py-2">
+          <div class="review-intro my-3 mx-3">
+            <h3 class="" style="font-size: 20px;">후기 ★4.96 (126개)</h3>
+          </div>
+          <div class="review d-flex flex-column mx-3 mt-2 pt-3">
             <div class="review-profile d-flex mb-1">
               <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[0].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
               <div class="review-name d-flex justify-content-between" style="width: 100%;">
@@ -311,6 +314,8 @@
               Hello my name is yunsuwon. I'm trying to tell you what is advantage of staying here.</p>
             </div>
           </div>
+
+
         </div>
         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
         </div>
