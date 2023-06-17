@@ -1,0 +1,42 @@
+<div class="d-flex align-items-start" style="font-size: 15px">
+  <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <button class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="false">Home</button>
+    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">그룹멤버</button>
+    <button class="nav-link active" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled" type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="true">가입신청목록</button>
+    <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
+    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+  </div>
+  <div class="tab-content" id="v-pills-tabContent">
+    <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>
+    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
+    <div class="tab-pane fade show active" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0" style="width: 100%">
+        <!-- 그룹가입 신청목록 --> 
+        <div class="review-intro my-3 mx-3">
+            <h3 class="" style="font-size: 20px;">총 가입신청: {{ group.join_request|length }}개</h3>
+        </div>
+
+        {% for i in range(0, group.join_request|length) %}
+        <div class="review d-flex flex-column mx-3 mt-2 pt-3" style="width: 100%">
+          <div class="review-profile d-flex mb-1">
+            <img src="{{ url_for('feature.get_profile_image', user_id=group.join_request[i].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+            <div class="review-name d-flex justify-content-between" style="width: 100%;">
+              <div class="d-flex flex-column"><h5 class="mb-0">{{ group.join_request[i].message_title }}</h5><p class="mb-0" style="font-size: 15px;">{{ group.join_request[i].created_at.strftime('%Y/%m/%d - %H:%M:%S') }}</p></div>
+              <div>
+                <form method="POST" action="{{ url_for('group.accept_join_request', join_request_id=group.join_request[i].id) }}">
+                    <input class="btn btn-primary" style="font-size: 15px" type="submit" value="수락하기">
+                </form>
+                <input class="btn btn-danger" style="font-size: 15px" type="submit" value="거절하기">
+              </div>
+            </div>
+          </div>
+          <div class="review-detail">
+            <p style="font-size: 16px">{{ group.join_request[i].message_content }}</p>
+          </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
+    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+  </div>
+</div>

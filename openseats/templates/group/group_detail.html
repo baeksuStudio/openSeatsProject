@@ -176,7 +176,7 @@
                 {% endif %}
             </div>
       {% else %}
-            <div style="background-color: #dedede; width: 650px;" class="carousel-img d-flex justify-content-center align-items-center">
+            <div style="background-color: #dedede; width: 650px;" class="carousel-img d-flex justify-content-center align-items-center mb-3">
               <div>이미지 없음</div>
             </div>
       {% endif %}
@@ -262,9 +262,9 @@
               {% if join_status == 'already joined' %}
               <input class="btn btn-primary" type="submit" value="이미 가입되어 있습니다." style="width: 100%" disabled>
               {% elif join_status == 'not joined' %}
-              <!-- <input class="btn btn-primary" type="submit" value="가입신청"> -->
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="myInput" style="width: 100%">가입신청</button>
-
+              {% elif join_status == 'already request' %}
+              <input class="btn btn-primary" type="submit" style="width: 100%" value="이미 가입신청 하였습니다." disabled>
               {% elif join_status == 'owner' %}
               <input class="btn btn-primary" type="submit" style="width: 100%" value="이 그룹의 소유자 입니다." disabled>
               {% endif %}
@@ -326,7 +326,9 @@
         <div class="tab-pane fade" id="pills-community" role="tabpanel" aria-labelledby="pills-comminuty-tab">community</div>
         <!-- 그룹장일 경우 관리탭 열람 가능 -->
         {% if join_status == 'owner' %}
-        <div class="tab-pane fade" id="pills-manage" role="tabpanel" aria-labelledby="pills-manage-tab">manage</div>
+        <div class="tab-pane fade" id="pills-manage" role="tabpanel" aria-labelledby="pills-manage-tab">
+          {% include 'group/group_detail_manage.html' %}
+        </div>
         {% endif %}
       </div>
     </div>

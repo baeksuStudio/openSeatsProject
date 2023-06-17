@@ -30,7 +30,8 @@ def detail_page(group_id):
     status = {
         0: 'not joined',
         1: 'already joined',
-        2: 'owner'
+        2: 'owner',
+        3: 'already request'
     }
     join_status = status[0]
 
@@ -48,6 +49,9 @@ def detail_page(group_id):
         # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
         if  Reservation.query.filter_by(user_id=user.id, group_id=group.id).first():
             join_status = status[1]
+
+        if JoinRequest.query.filter_by(user_id=user.id, group_id=group.id).first():
+            join_status = status[3]
 
         # 이 그룹의 주인인 경우 true
         if Group.query.filter_by(user_id=user.id, id=group.id).first():
@@ -105,6 +109,47 @@ def join_request(group_id):
 
     flash('성공적으로 가입신청 되었습니다.', category='primary')
     return redirect(url_for('group.detail_page', group_id=group_id))
+
+@bp.route('/accept_join_request/<int:join_request_id>', methods=['POST'])
+@login_required  # 로그인된 사용자만 접근 가능하도록 설정
+def accept_join_request(join_request_id):
+    # 가입 신청 정보 가져오기
+    join_request = JoinRequest.query.get(join_request_id)
+
+    owner_id = g.user.id
+    request_user_id = join_request.user_id
+    group_id = join_request.group.id  # 가입 신청할 그룹 ID
+    # 가입 신청이 있는지 확인 및 소유자 확인 로직
+    if g.user.id == join_request.group.owner.id:
+        # 가입 신청 수락 처리
+        reservation = Reservation.query.filter_by(user_id=request_user_id, group_id=group_id)
+        # 가입 신청 로직 추가
+        reservation = Reservation(user_id=request_user_id, group_id=group_id)
+        db.session.add(reservation)
+
+        # 기존 가입 신청 삭제
+        db.session.delete(join_request)
+        db.session.commit()
+        flash(f'새로운 멤버({User.query.get(request_user_id)}) 추가되었습니다.')
+        return redirect(url_for('group.detail_page', group_id=group_id))
+    else:
+        flash('유저나 정보를 찾을 수 없습니다.', category='danger')
+        return redirect(url_for('group.detail_page', group_id=group_id))   
+
+    return redirect('/notification')  # 처리 후 알림 확인 페이지로 리다이렉트
+
+@bp.route('/reject_join_request/<int:join_request_id>', methods=['POST'])
+@login_required  # 로그인된 사용자만 접근 가능하도록 설정
+def reject_join_request(join_request_id):
+    # 가입 신청 정보 가져오기
+    join_request = JoinRequest.query.get(join_request_id)
+
+    # 가입 신청이 있는지 확인 및 소유자 확인 로직
+
+    # 가입 신청 거절 처리
+    # ...
+
+    return redirect('/notification')  # 처리 후 알림 확인 페이지로 리다이렉트
         
 
 @bp.route('/join/<int:group_id>', methods=['POST'])
