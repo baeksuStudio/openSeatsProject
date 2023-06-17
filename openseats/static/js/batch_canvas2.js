@@ -1,22 +1,8 @@
-// 화면구성
-var container = document.querySelector('#work-space');
-
-var WIDTH = 3000;
-var HEIGHT = 2000;
-var MUMBER = 200;
-
-
-var GUIDELINE_OFFSET = 5;
-var stage = new Konva.Stage({
-  container: 'konva-canvas',   // id of container <div>
-  width: WIDTH,
-  height: HEIGHT,
-});
-
-// then create layer
-var layer = new Konva.Layer();
+import {stage, layer} from './set_screen.js';
 
 // create our shape
+var GUIDELINE_OFFSET = 5;
+
 var addObjectBtn = document.getElementById('add-object-btn');
 addObjectBtn.addEventListener('click', function() {
   var selectElement = document.querySelector('.side-space-menubar select');
@@ -44,30 +30,18 @@ addObjectBtn.addEventListener('click', function() {
   console.log(objectWidth);
   console.log(objectHeight);
   
-  
-  var group = new Konva.Group({
-    name: 'object',
-    draggable: true
-  });
-
-  group.add(
+  layer.add(
     new Konva.Rect({
     x: 100,
     y: 100,
     width: objectWidth,
     height: objectHeight,
     fill: color,
-    }),
-    new Konva.Text({
-      x: 100,
-      y: 100,
-      text: objectName,
-      fontSize: 20,
-      fill: 'white',
-    }));
+    name: 'object',
+    draggable: true,
+    }).setAttr('objectName',objectName));
 
-    layer.add(group)
-
+    tr.moveToTop() // tr객체 위로 올려줌
 });
 
 var rect = new Konva.Rect({
@@ -122,6 +96,7 @@ var tr = new Konva.Transformer({
   centeredScaling: true,
   rotationSnaps: [0, 90, 180, 270],
 });
+
 layer.add(tr);
 
 
@@ -195,21 +170,25 @@ stage.on('mouseup touchend', (e) => {
 stage.on('click tap', function (e) {
   // if we are selecting with rect, do nothing
   if (selectionRectangle.visible()) {
-
+    console.log("selectionRectangle visible false1");
     return;
   }
 
   // if click on empty area - remove all selections
   if (e.target === stage) {
-
+    console.log("selectionRectangle visible false2");
     tr.nodes([]);
     return;
   }
 
   // do nothing if clicked NOT on our rectangles
   if (!e.target.hasName('object')) {
+    console.log("selectionRectangle visible false3");
+    console.log(e.target);
     return;
   }
+  console.log("selectionRectangle visible true");
+  console.log(e.target);
 
   // do we pressed shift or ctrl?
   const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;

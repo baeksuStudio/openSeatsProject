@@ -24,3 +24,10 @@
     margin: 10px;
     padding: 10px;
 }
+#konva-previewStage{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border: 1px solid grey;
+    background-color: lightgrey;
+}

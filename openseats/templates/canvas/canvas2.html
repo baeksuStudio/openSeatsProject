@@ -25,8 +25,8 @@
         </div>
         <div class="mb-3">
           <label class="form-label">크기</label>
-          <input type="number" min="1" class="form-control mb-3" id="input-object-width" placeholder="너비">
-          <input type="number" min="1" class="form-control" id="input-object-height" placeholder="높이">
+          <input type="number" min="1" class="form-control mb-3" id="input-object-width" placeholder="너비 (50이상500이하)">
+          <input type="number" min="1" class="form-control" id="input-object-height" placeholder="높이 (50이상500이하)">
         </div>
         <div class="mb-3">
           <label for="color-input" class="form-label">색 선택</label>
@@ -47,10 +47,11 @@
       <!-- Konva canvas container -->
       <div id="large-container">
         <div id="konva-canvas"></div>
-        <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='/js/test.js')}} "></script>
+        <script type="module" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
+        
       </div>
-
+      <div id="konva-previewStage"></div>
+      
     </div>
   </div>
 </div>
