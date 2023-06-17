@@ -21,18 +21,9 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     userID = db.Column(db.String(50), unique=True, nullable=False)
     userMessage = db.Column(db.String(200), unique=False, nullable=True)
-
     groups = db.relationship('Group', backref='owner')
+    join_requests = db.relationship('JoinRequest', backref='user', lazy='dynamic')
 
-class Reservation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
-    # check_in = db.Column(db.DateTime, nullable=False)
-    # check_out = db.Column(db.DateTime, nullable=False)
-
-    user = db.relationship('User', backref='reservation')
-    group = db.relationship('Group', backref='reservation')
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,10 +32,19 @@ class Group(db.Model):
     description = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
-    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
-    
     images = db.relationship('Image', backref='group_set', lazy=True)
+    join_requests = db.relationship('JoinRequest', backref='group', lazy='dynamic')
+
+
+class Reservation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+    check_in = db.Column(db.DateTime, nullable=False)
+
+    user = db.relationship('User', backref='reservation')
+    group = db.relationship('Group', backref='reservation')
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,6 +53,19 @@ class Image(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+
+class JoinRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message_title = db.Column(db.String(255), nullable=False)
+    message_content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+
+    
+     
+
 
 
 

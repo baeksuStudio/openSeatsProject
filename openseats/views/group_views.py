@@ -3,9 +3,9 @@ from datetime import datetime
 from werkzeug.utils import secure_filename, redirect
 from openseats import db
 # from __main__ import app
-from openseats.models import Group, Image, Reservation, User
-from openseats.forms import GroupForm
-from .auth_views import login_required
+from openseats.models import Group, Image, Reservation, User, JoinRequest
+from openseats.forms import GroupForm, JoinRequestForm
+from .auth_views import login_required  
 
 import os
 bp = Blueprint('group', __name__, url_prefix='/group')
@@ -25,6 +25,8 @@ def main_page():
 @login_required
 def detail_page(group_id): 
     # 이미 가입되어 있는지 확인
+    form = JoinRequestForm()
+    group = Group.query.get_or_404(group_id)
     status = {
         0: 'not joined',
         1: 'already joined',
@@ -51,9 +53,59 @@ def detail_page(group_id):
         if Group.query.filter_by(user_id=user.id, id=group.id).first():
             join_status = status[2]
 
-    group = Group.query.get_or_404(group_id)
-    return render_template('group/group_detail.html', group=group, join_status=join_status)
+    return render_template('group/group_detail.html', group=group, join_status=join_status, form=form)
     
+@bp.route('/create/', methods=('GET', 'POST'))
+@login_required
+def create():
+    form = GroupForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        # 새로운 Group 모델 객체 생성
+        group = Group(
+            name=form.name.data, 
+            address=form.address.data, 
+            description=form.description.data, 
+            owner=g.user
+            )
+        db.session.add(group)
+        db.session.commit()
+
+        # 이미지 파일 업로드
+        if request.files.getlist('images')[0]: #이미지 파일 있을경우, 없을 시 데이터베이스 저장 X
+            for n, image_file in enumerate(request.files.getlist('images')):
+                file_extension = os.path.splitext(image_file.filename)[1]
+                filename = secure_filename(str(n) + file_extension)
+                path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(group.id), filename)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                image_file.save(path)
+
+                image = Image(name=filename, path=path, group_id=group.id)
+                db.session.add(image)
+
+        db.session.commit()
+
+        flash('성공적으로 그룹이 생성되었습니다.', category='primary')
+        return redirect(url_for('group.detail_page', group_id=group.id))
+    return render_template('group/group_create.html', form=form)
+    
+
+@bp.route('/join_request/<int:group_id>', methods=['POST'])
+@login_required
+def join_request(group_id):
+    form = JoinRequestForm()
+
+    
+    user = g.user
+    message_title = form.message_title.data
+    message_content = form.message_content.data
+
+    join_request = JoinRequest(user_id=user.id, group_id=group_id, message_title=message_title, message_content=message_content)
+    db.session.add(join_request)
+    db.session.commit()
+
+    flash('성공적으로 가입신청 되었습니다.', category='primary')
+    return redirect(url_for('group.detail_page', group_id=group_id))
+        
 
 @bp.route('/join/<int:group_id>', methods=['POST'])
 def join(group_id):
@@ -89,38 +141,6 @@ def join(group_id):
    
     
 
-@bp.route('/create/', methods=('GET', 'POST'))
-@login_required
-def create():
-    form = GroupForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        # 새로운 Group 모델 객체 생성
-        group = Group(
-            name=form.name.data, 
-            address=form.address.data, 
-            description=form.description.data, 
-            owner=g.user
-            )
-        db.session.add(group)
-        db.session.commit()
-
-        # 이미지 파일 업로드
-        if request.files.getlist('images')[0]: #이미지 파일 있을경우, 없을 시 데이터베이스 저장 X
-            for n, image_file in enumerate(request.files.getlist('images')):
-                file_extension = os.path.splitext(image_file.filename)[1]
-                filename = secure_filename(str(n) + file_extension)
-                path = os.path.join(current_app.config['UPLOAD_FOLDER'], str(group.id), filename)
-                os.makedirs(os.path.dirname(path), exist_ok=True)
-                image_file.save(path)
-
-                image = Image(name=filename, path=path, group_id=group.id)
-                db.session.add(image)
-
-        db.session.commit()
-
-        flash('성공적으로 생성되었습니다.', category='primary')
-        return redirect(url_for('group.detail_page', group_id=group.id))
-    return render_template('group/group_create.html', form=form)
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
 # @bp.route('/create/', methods=('GET', 'POST'))
