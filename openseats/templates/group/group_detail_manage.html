@@ -25,7 +25,9 @@
                 <form method="POST" action="{{ url_for('group.accept_join_request', join_request_id=group.join_request[i].id) }}">
                     <input class="btn btn-primary" style="font-size: 15px" type="submit" value="수락하기">
                 </form>
-                <input class="btn btn-danger" style="font-size: 15px" type="submit" value="거절하기">
+                <form method="POST" action="{{ url_for('group.reject_join_request', join_request_id=group.join_request[i].id) }}">
+                    <input class="btn btn-danger" style="font-size: 15px" type="submit" value="거절하기">
+                </form>
               </div>
             </div>
           </div>

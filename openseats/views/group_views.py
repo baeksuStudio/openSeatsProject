@@ -130,13 +130,14 @@ def accept_join_request(join_request_id):
         # 기존 가입 신청 삭제
         db.session.delete(join_request)
         db.session.commit()
-        flash(f'새로운 멤버({User.query.get(request_user_id)}) 추가되었습니다.')
+        flash(f'새로운 멤버({User.query.get(request_user_id).username})가 추가되었습니다.', category='primary')
         return redirect(url_for('group.detail_page', group_id=group_id))
     else:
-        flash('유저나 정보를 찾을 수 없습니다.', category='danger')
+        flash('승인되지 않은 접속입니다.', category='danger')
         return redirect(url_for('group.detail_page', group_id=group_id))   
 
-    return redirect('/notification')  # 처리 후 알림 확인 페이지로 리다이렉트
+
+    return redirect(url_for('group.detail_page', group_id=group_id))   
 
 @bp.route('/reject_join_request/<int:join_request_id>', methods=['POST'])
 @login_required  # 로그인된 사용자만 접근 가능하도록 설정
@@ -144,13 +145,23 @@ def reject_join_request(join_request_id):
     # 가입 신청 정보 가져오기
     join_request = JoinRequest.query.get(join_request_id)
 
+    owner_id = g.user.id
+    request_user_id = join_request.user_id
+    group_id = join_request.group.id  # 가입 신청할 그룹 ID
     # 가입 신청이 있는지 확인 및 소유자 확인 로직
+    if g.user.id == join_request.group.owner.id:
+        # 기존 가입 신청 삭제
+        db.session.delete(join_request)
+        db.session.commit()
+        flash(f'({User.query.get(request_user_id).username})의 그룹가입 신청이 거절되었습니다.', category='primary')
+        return redirect(url_for('group.detail_page', group_id=group_id))
+    else:
+        flash('승인되지 않은 접속입니다', category='danger')
+        return redirect(url_for('group.detail_page', group_id=group_id))   
 
-    # 가입 신청 거절 처리
-    # ...
 
-    return redirect('/notification')  # 처리 후 알림 확인 페이지로 리다이렉트
-        
+    return redirect(url_for('group.detail_page', group_id=group_id))   
+
 
 @bp.route('/join/<int:group_id>', methods=['POST'])
 def join(group_id):
