@@ -1,10 +1,12 @@
 import {stage, layer} from './set_screen.js';
 
-// create our shape
-var GUIDELINE_OFFSET = 5;
+function export_tr_nodes(nodes) {
+  console.log(nodes[0].attrs)
+}
 
 var addObjectBtn = document.getElementById('add-object-btn');
-addObjectBtn.addEventListener('click', function() {
+addObjectBtn.addEventListener('click', function(event) {
+  
   var selectElement = document.querySelector('.side-space-menubar select');
   var selectedOption = selectElement.options[selectElement.selectedIndex].value;
   
@@ -20,16 +22,47 @@ addObjectBtn.addEventListener('click', function() {
   var objectHeightInput = document.getElementById('input-object-height');
   var objectHeight = Number(objectHeightInput.value);
 
-  console.log(selectElement);
-  console.log('선택된 모양:', selectedOption);
-  console.log(objectNameInput);
-  console.log('객체 이름:', objectName);
-  console.log(colorInput);
-  console.log('선택된 색:', color);
+  if (selectedOption === '모양 선택') {
+    document.getElementById("selected-option-alert").classList.remove("d-none");
+    return
+  } else {
+    document.getElementById("selected-option-alert").classList.add("d-none");
+  }
+  if (objectName === '') {
+    document.getElementById("input-object-name-alert").classList.remove("d-none");
+    return
+  } else {
+    document.getElementById("input-object-name-alert").classList.add("d-none");
+  }
 
-  console.log(objectWidth);
-  console.log(objectHeight);
-  
+  if (objectWidth === 0) {
+    document.getElementById("input-object-width-alert").classList.remove("d-none");
+    return
+   } else {
+    document.getElementById("input-object-width-alert").classList.add("d-none");
+  }
+
+  if (objectWidth < 50 || objectWidth > 501) {
+    document.getElementById("input-object-width-size-alert").classList.remove("d-none");
+    return
+  } else {
+    document.getElementById("input-object-width-size-alert").classList.add("d-none");
+  }
+
+  if (objectHeight === 0) {
+    document.getElementById("input-object-height-alert").classList.remove("d-none");
+    return
+  } else {
+    document.getElementById("input-object-height-alert").classList.add("d-none");
+  }
+
+  if (objectHeight < 50 || objectHeight > 501) {
+    document.getElementById("input-object-height-size-alert").classList.remove("d-none");
+    return
+  } else {
+    document.getElementById("input-object-height-size-alert").classList.add("d-none");
+  }
+
   layer.add(
     new Konva.Rect({
     x: 100,
@@ -44,48 +77,7 @@ addObjectBtn.addEventListener('click', function() {
     tr.moveToTop() // tr객체 위로 올려줌
 });
 
-var rect = new Konva.Rect({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  width: 100,
-  height: 100,
-  fill: '#563d7c',
-  name: 'object',
-  draggable: true
-});
-var rect2 = new Konva.Rect({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  width: 100,
-  height: 100,
-  fill: 'green',
-  name: 'object',
-  draggable: true
-});
-var rect3 = new Konva.Rect({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  width: 100,
-  height: 100,
-  fill: 'green',
-  name: 'object',
-  draggable: true
-});
-var rect4 = new Konva.Rect({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  width: 100,
-  height: 100,
-  fill: 'green',
-  name: 'object',
-  draggable: true
-});
-
-// add the shape to the layer
-layer.add(rect);
-layer.add(rect2);
-layer.add(rect3);
-layer.add(rect4);
+var GUIDELINE_OFFSET = 5;
 
 // add the layer to the stage
 stage.add(layer);
@@ -164,6 +156,10 @@ stage.on('mouseup touchend', (e) => {
   
   
   tr.nodes(selected);
+  if (tr.nodes().length >= 1) {
+    export_tr_nodes(tr.nodes())
+  }
+  
 });
 
 // clicks should select/deselect shapes
@@ -176,24 +172,19 @@ stage.on('click tap', function (e) {
 
   // if click on empty area - remove all selections
   if (e.target === stage) {
-    console.log("selectionRectangle visible false2");
     tr.nodes([]);
     return;
   }
 
   // do nothing if clicked NOT on our rectangles
   if (!e.target.hasName('object')) {
-    console.log("selectionRectangle visible false3");
-    console.log(e.target);
     return;
   }
-  console.log("selectionRectangle visible true");
-  console.log(e.target);
 
   // do we pressed shift or ctrl?
   const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
   const isSelected = tr.nodes().indexOf(e.target) >= 0;
-
+  
   if (!metaPressed && !isSelected) {
     // if no key pressed and the node is not selected
     // select just one
@@ -211,6 +202,9 @@ stage.on('click tap', function (e) {
     // add the node into selection
     const nodes = tr.nodes().concat([e.target]);
     tr.nodes(nodes);
+  }
+  if (tr.nodes().length >= 1) {
+    export_tr_nodes(tr.nodes())
   }
 });
 
@@ -378,7 +372,6 @@ function drawGuides(guides) {
 }
 
 layer.on('dragmove', function (e) {
-
   // 만약 여러 객체가 선택되어 있으면 가이드 라인을 그리지 않음
   var selectedNodes = tr.nodes();
   if (selectedNodes.length >= 1) {

@@ -10,34 +10,72 @@
 
 <div class="container-fluid">
   <div class="row">
+    
     <div id="side-space" class="col-md-2">
-      
+      <div class="mb-3"></div>
+      <!-- side bar alert메세지 -->
+      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="selected-option-alert">
+        <strong>추가 오류!</strong> 객체 모양을 선택해주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-name-alert">
+        <strong>추가 오류!</strong> 객체 이름을 입력해 주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-width-alert">
+        <strong>추가 오류!</strong> 객체 너비를 입력해 주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-height-alert">
+        <strong>추가 오류!</strong> 객체 높이를 입력해 주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      <div class="alert alert-warning alert-dismissible fade show d-none" role="alert" id="input-object-width-size-alert">
+        <strong>추가 오류!</strong> 너비는 50이상 500이하로 해주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div class="alert alert-warning alert-dismissible fade show d-none" role="alert" id="input-object-height-size-alert">
+        <strong>추가 오류!</strong> 높이는 50이상 500이하로 해주세요
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <!-- 끝 -->
       <div class="side-space-menubar create">
-        <h4>객체 만들기</h4>
-        <select class="form-select mb-3" aria-label="object select example">
-          <option selected>모양 선택</option>
-          <option value="1">네모</option>
-          <option value="2">텍스트</option>
-        </select>
+        <h4 class="mb-3">객체 만들기</h4>
         <div class="mb-3">
-          <label for="input-object-name" class="form-label">객체 이름</label>
+          <label for="input-object-name" class="form-label">객체 모양 선택<span class="text-danger">*</span></label>
+          <select class="form-select" aria-label="object select">
+            <option selected>모양 선택</option>
+            <option value="1">네모</option>
+            <option value="2">텍스트</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="input-object-name" class="form-label">객체 이름<span class="text-danger">*</span></label>
           <input type="text" class="form-control" id="input-object-name" placeholder="객체 이름 지정">
         </div>
         <div class="mb-3">
-          <label class="form-label">크기</label>
+          <label class="form-label">크기<span class="text-danger">*</span></label>
           <input type="number" min="1" class="form-control mb-3" id="input-object-width" placeholder="너비 (50이상500이하)">
           <input type="number" min="1" class="form-control" id="input-object-height" placeholder="높이 (50이상500이하)">
         </div>
         <div class="mb-3">
-          <label for="color-input" class="form-label">색 선택</label>
+          <label for="color-input" class="form-label">색 선택<span class="text-danger">*</span></label>
           <input type="color" class="form-control form-control-color" id="color-input" value="#563d7c" title="Choose your color">
         </div>
-        <button class="btn btn-primary" id="add-object-btn">객체 추가</button>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary" id="add-object-btn">객체 추가</button>
+        </div>
       </div>
       <hr>
       <div class="side-space-menubar edit">
         <h4>객체 수정</h4>
-      
+        <select class="form-select mb-3" aria-label=".form-select-lg example">
+          <option selected>선택된 객체</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
       </div>
       
       <!-- Sidebar content here -->
