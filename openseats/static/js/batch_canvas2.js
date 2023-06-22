@@ -1,8 +1,36 @@
 import {stage, layer} from './set_screen.js';
 
-function export_tr_nodes(nodes) {
-  console.log(nodes[0].attrs)
+function tr_nodes_select_update(nodes) {
+  var selectElement = document.querySelector('#select-object');
+
+  selectElement.innerHTML = '';
+
+  // 기본으로 선택되도록 설정
+  var defaultOption = document.createElement('option');
+  defaultOption.textContent = "선택된 객체";
+  defaultOption.selected = true; 
+
+  selectElement.appendChild(defaultOption);
+  for (var i = 0; i < nodes.length; i++) {
+    var optionElement = document.createElement('option');
+    optionElement.value = i + 1;
+    optionElement.textContent = nodes[i].attrs.objectName;
+    selectElement.appendChild(optionElement);
+  }
+
+  if (nodes.length >= 1) {
+    console.log(nodes[0].attrs)
+
+
+  }
 }
+function updatePreview() {
+  const scale = 1 / 4;
+  // use pixelRatio to generate smaller preview
+  const url = stage.toDataURL({ pixelRatio: scale });
+  document.getElementById('preview').src = url;
+}
+
 
 var addObjectBtn = document.getElementById('add-object-btn');
 addObjectBtn.addEventListener('click', function(event) {
@@ -22,6 +50,7 @@ addObjectBtn.addEventListener('click', function(event) {
   var objectHeightInput = document.getElementById('input-object-height');
   var objectHeight = Number(objectHeightInput.value);
 
+  // 객체 정보 유효성 검사
   if (selectedOption === '모양 선택') {
     document.getElementById("selected-option-alert").classList.remove("d-none");
     return
@@ -76,7 +105,7 @@ addObjectBtn.addEventListener('click', function(event) {
 
     tr.moveToTop() // tr객체 위로 올려줌
 });
-
+updatePreview();
 var GUIDELINE_OFFSET = 5;
 
 // add the layer to the stage
@@ -156,23 +185,23 @@ stage.on('mouseup touchend', (e) => {
   
   
   tr.nodes(selected);
-  if (tr.nodes().length >= 1) {
-    export_tr_nodes(tr.nodes())
-  }
-  
+
+  tr_nodes_select_update(tr.nodes())
+
 });
 
 // clicks should select/deselect shapes
 stage.on('click tap', function (e) {
+  
   // if we are selecting with rect, do nothing
   if (selectionRectangle.visible()) {
-    console.log("selectionRectangle visible false1");
     return;
   }
 
   // if click on empty area - remove all selections
   if (e.target === stage) {
     tr.nodes([]);
+    tr_nodes_select_update(tr.nodes())
     return;
   }
 
@@ -180,7 +209,7 @@ stage.on('click tap', function (e) {
   if (!e.target.hasName('object')) {
     return;
   }
-
+  
   // do we pressed shift or ctrl?
   const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
   const isSelected = tr.nodes().indexOf(e.target) >= 0;
@@ -189,6 +218,7 @@ stage.on('click tap', function (e) {
     // if no key pressed and the node is not selected
     // select just one
     tr.nodes([e.target]);
+    tr_nodes_select_update(tr.nodes())
   } else if (metaPressed && isSelected) {
     // if we pressed keys and node was selected
     // we need to remove it from selection:
@@ -197,14 +227,16 @@ stage.on('click tap', function (e) {
     // remove node from array
     nodes.splice(nodes.indexOf(e.target), 1);
     tr.nodes(nodes);
+    tr_nodes_select_update(tr.nodes())
     
   } else if (metaPressed && !isSelected) {
     // add the node into selection
     const nodes = tr.nodes().concat([e.target]);
     tr.nodes(nodes);
+    tr_nodes_select_update(tr.nodes())
   }
   if (tr.nodes().length >= 1) {
-    export_tr_nodes(tr.nodes())
+    tr_nodes_select_update(tr.nodes())
   }
 });
 
@@ -445,5 +477,6 @@ layer.on('dragmove', function (e) {
 layer.on('dragend', function (e) {
   // clear all previous lines on the screen
   layer.find('.guid-line').forEach((l) => l.destroy());
+  updatePreview()
 });
 

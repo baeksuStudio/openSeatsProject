@@ -7,22 +7,25 @@
 <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #F5F5F5;
-  background-size: cover;
-}
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #f0f0f0;
+      }
 
-#desc {
-  position : absolute;
-  top: 5px;
-  left: 5px;
-}
+      #preview {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        border: 1px solid grey;
+        background-color: lightgrey;
+      }
 </style>
 <div id="container"></div>
+<img id="preview" />
 <script type="text/javascript" src="{{ url_for('static', filename='/js/batch_canvas3.js') }}"></script>
+
 </div>
 
 

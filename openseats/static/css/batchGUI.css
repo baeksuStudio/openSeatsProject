@@ -31,3 +31,10 @@
     border: 1px solid grey;
     background-color: lightgrey;
 }
+#preview {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border: 1px solid grey;
+    background-color: lightgrey;
+}
