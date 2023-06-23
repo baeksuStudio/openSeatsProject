@@ -20,7 +20,12 @@
           <div class="review-profile d-flex mb-1">
             <img src="{{ url_for('feature.get_profile_image', user_id=group.join_request[i].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
             <div class="review-name d-flex justify-content-between" style="width: 100%;">
-              <div class="d-flex flex-column"><h5 class="mb-0">{{ group.join_request[i].message_title }}</h5><p class="mb-0" style="font-size: 15px;">{{ group.join_request[i].created_at.strftime('%Y/%m/%d - %H:%M:%S') }}</p></div>
+              <div class="d-flex flex-column">
+                <h5 class="mb-0">{{ group.join_request[i].user.username }}</h5>
+                <p class="mb-0" style="font-size: 15px;">
+                  {{ group.join_request[i].created_at.strftime('%Y/%m/%d - %H:%M:%S') }}
+                </p>
+              </div>
               <div>
                 <form method="POST" action="{{ url_for('group.accept_join_request', join_request_id=group.join_request[i].id) }}">
                     <input class="btn btn-primary" style="font-size: 15px" type="submit" value="수락하기">
@@ -32,6 +37,7 @@
             </div>
           </div>
           <div class="review-detail">
+            <h6 class="mb-0">{{ group.join_request[i].message_title }}</h6>
             <p style="font-size: 16px">{{ group.join_request[i].message_content }}</p>
           </div>
         </div>

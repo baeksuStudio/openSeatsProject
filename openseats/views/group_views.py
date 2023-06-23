@@ -33,6 +33,7 @@ def detail_page(group_id):
         2: 'owner',
         3: 'already request'
     }
+    
     join_status = status[0]
 
     if g.user == None:
@@ -57,7 +58,7 @@ def detail_page(group_id):
         if Group.query.filter_by(user_id=user.id, id=group.id).first():
             join_status = status[2]
 
-    return render_template('group/group_detail.html', group=group, join_status=join_status, form=form)
+    return render_template('group/group_detail/group_detail.html', group=group, join_status=join_status, form=form)
     
 @bp.route('/create/', methods=('GET', 'POST'))
 @login_required
@@ -153,7 +154,7 @@ def reject_join_request(join_request_id):
         # 기존 가입 신청 삭제
         db.session.delete(join_request)
         db.session.commit()
-        flash(f'({User.query.get(request_user_id).username})의 그룹가입 신청이 거절되었습니다.', category='primary')
+        flash(f'({User.query.get(request_user_id).username})의 그룹가입 신청이 거절되었습니다.', category='danger')
         return redirect(url_for('group.detail_page', group_id=group_id))
     else:
         flash('승인되지 않은 접속입니다', category='danger')
@@ -163,38 +164,6 @@ def reject_join_request(join_request_id):
     return redirect(url_for('group.detail_page', group_id=group_id))   
 
 
-@bp.route('/join/<int:group_id>', methods=['POST'])
-def join(group_id):
-    # group = Group.query.get_or_404(group_id)
-        # user = g.user
-    if g.user == None:
-        # 회원정보가 없을 경우
-        return redirect(url_for(auth.SignIn)) 
-    else:
-        # 회원정보 있을 경우
-        user = User.query.get(g.user.id)
-        group = Group.query.get(group_id)
-        if not user or not group:
-            flash('유저나 그룹의 정보를 찾을 수 없습니다.', category='danger')
-            return redirect(url_for('group.detail_page', group_id=group_id))   
-
-        # 유저와 호텔 두개의 정보가 모두 있는 Reservation record가 있는지 확인
-        if Reservation.query.filter_by(user_id=user.id, group_id=group.id).first():
-            flash('이미 가입되어 있습니다.', category='danger')
-            return redirect(url_for('group.detail_page', group_id=group_id))   
-        # 이 그룹의 주인인 경우 
-        elif Group.query.filter_by(user_id=user.id, id=group.id).first():
-            flash('이 그룹의 소유자 입니다.', category='danger')
-            return redirect(url_for('group.detail_page', group_id=group_id))   
-        else:
-            reservation = Reservation(user_id=user.id, group_id=group_id)
-            db.session.add(reservation)
-            db.session.commit()
-            flash('성공적으로 가입되었습니다.', category='primary')
-            return redirect(url_for('group.detail_page', group_id=group_id))
-    return redirect(url_for('main.main_page'))
-
-   
     
 
 

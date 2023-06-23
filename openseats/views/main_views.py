@@ -20,11 +20,11 @@ def main_page() :
 @bp.route('/<string:username>')
 def my_page(username) :
     user = User.query.filter_by(userID=username).first()
-    reservations = Reservation.query.filter_by(user_id=user.id).all()
-    if user is None:
-        abort(404)
-    else :
+    if not user == None:
+        reservations = Reservation.query.filter_by(user_id=user.id).all()
         return render_template('mypage/mypage.html', user=user, reservations=reservations)
+    else:
+        abort(404)
 
 @bp.route('/<string:user_page>/edit', methods=('GET', 'POST'))
 @login_required

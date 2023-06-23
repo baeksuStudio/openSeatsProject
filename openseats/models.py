@@ -23,6 +23,8 @@ class User(db.Model):
     userMessage = db.Column(db.String(200), unique=False, nullable=True)
     groups = db.relationship('Group', backref='owner')
     # join_requests = db.relationship('JoinRequest', backref='user', lazy='dynamic')
+    def __repr__(self):
+      return f"<User('{self.id}', '{self.username}', '{self.email}')>"
 
 
 class Group(db.Model):
@@ -36,6 +38,16 @@ class Group(db.Model):
     images = db.relationship('Image', backref='group_set', lazy=True)
     # join_requests = db.relationship('JoinRequest', backref='group', lazy='dynamic')
 
+class JoinRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message_title = db.Column(db.String(255), nullable=False)
+    message_content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    user = db.relationship('User', backref='join_request')
+    group = db.relationship('Group', backref='join_request')
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,16 +66,7 @@ class Image(db.Model):
 
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
 
-class JoinRequest(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    message_title = db.Column(db.String(255), nullable=False)
-    message_content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable = False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    user = db.relationship('User', backref='join_request')
-    group = db.relationship('Group', backref='join_request')
 
 
     
