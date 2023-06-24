@@ -1,0 +1,104 @@
+      <!-- Tab -->
+{% if join_status == 'owner' %}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="font-size: 15px;">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-description" aria-selected="true">홈</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="pills-members-tab" data-bs-toggle="pill" data-bs-target="#pills-members" type="button" role="tab" aria-controls="pills-reviews" aria-selected="false">
+      그룹 멤버
+      <span class="badge bg-secondary">{{ group.reservation|length }}</span>
+    </a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="pills-joinRequest-tab" data-bs-toggle="pill" data-bs-target="#pills-joinRequest" type="button" role="tab" aria-controls="pills-joinRequest" aria-selected="false">
+      가입신청 목록
+      <span class="badge bg-danger">{{ group.join_request|length }}</span>
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content border-top pt-2" style="font-size: 20px" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <!-- First content -->
+    Home tab 
+    <!-- First content end -->
+  </div>
+  <div class="tab-pane fade show" id="pills-members" role="tabpanel" aria-labelledby="pills-members-tab">
+    <!-- Second content -->
+    <table class="table table" style="font-size: 15px;">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">프로필</th>
+          <th scope="col">이름</th>
+          <th scope="col">이메일</th>
+          <th scope="col">아이디</th>
+          <th scope="col">가입일자</th>
+          <th scope="col">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(0, group.reservation|length) %}
+        <tr>
+          <th class="align-middle" scope="row">{{ i + 1 }}</th>
+          <td class="align-middle">
+            <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[i].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+          </td>
+          <td class="align-middle">{{ group.reservation[i].user.username }}</td>
+          <td class="align-middle">{{ group.reservation[i].user.email }}</td>
+          <td class="align-middle">{{ group.reservation[i].user.userID }}</td>
+          <td class="align-middle">{{ group.reservation[i].created_at.strftime('%Y/%m/%d') }}</td>
+          <td class="align-middle">
+              <a class="btn btn-primary align-middle" href="{{ url_for('main.my_page', username=group.reservation[i].user.userID)}}">
+                확인
+              </a>
+              <button type="button" class="btn btn-danger" style="font-size: 15px;">방출</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- Second content end -->
+  </div>
+  <div class="tab-pane fade show" id="pills-joinRequest" role="tabpanel" aria-labelledby="pills-joinRequest-tab">
+    <!-- Third content -->
+    {% if group.join_request|length < 1 %}
+    <div class="review-intro my-3">
+      <h3 class="" style="font-size: 20px;">가입 신청이 없습니다.</h3>
+    </div>
+    {% endif %}
+      <!-- 가입신청 목록 시작 -->
+    {% for i in range(0, group.join_request|length) %}
+    <div class="review d-flex flex-column mt-3 mx-3">
+      <div class="review-profile d-flex mb-1">
+        <img src="{{ url_for('feature.get_profile_image', user_id=group.join_request[i].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+        <div class="review-name d-flex justify-content-between" style="width: 100%;">
+          <div class="d-flex flex-column">
+            <a class="a" class="fw-bold"  href="{{ url_for('main.my_page', username=group.join_request[i].user.userID)}}">
+              <h5 class="mb-0">{{group.join_request[i].user.username}}</h5>
+            </a>
+            <p class="mb-0" style="font-size: 15px;">{{ group.join_request[i].created_at.strftime('%Y/%m/%d - %H:%M:%S') }}</p></div>
+          <div class="d-flex">
+            <form style="margin-right: 3px;" method="POST" action="{{ url_for('group.accept_join_request', join_request_id=group.join_request[i].id) }}"> 
+              <input class="btn btn-primary" style="font-size: 15px" type="submit" value="수락하기">
+            </form>
+            <form method="POST" action="{{ url_for('group.reject_join_request', join_request_id=group.join_request[i].id) }}">
+                <input class="btn btn-danger" style="font-size: 15px" type="submit" value="거절하기">
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="review-detail">
+        <!-- Request title -->
+        <h5 class="mb-0" style="font-size: 17px">{{ group.join_request[i].message_title }}</h5>
+        <!-- request content -->
+        <p class="mb-0" style="font-size: 13px">{{ group.join_request[i].message_content }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    <!-- Third content end -->
+  </div>
+</div>
+{% endif %}
+            

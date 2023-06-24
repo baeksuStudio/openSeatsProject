@@ -43,14 +43,22 @@ class GroupForm(FlaskForm):
     name = StringField('제목', validators=[DataRequired('제목은 필수 항목입니다.'), Length(max=50)])
     address = StringField('주소', validators=[DataRequired('주소는 필수 항목입니다.')])
     description = StringField('설명', validators=[DataRequired('설명은 필수 항목입니다.')])
-    money_per_hour = IntegerField('시간당 금액', validators=[DataRequired()])
-    # images = MultipleFileField('이미지', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only')])
-    images = MultipleFileField('섬네일 이미지', validators=[InputRequired('이미지 업로드는 필수 항목입니다.'), MultiFileAllowed(['jpg', 'png', 'jpeg'], 'jpg, png, jpeg 파일만 업로드 할 수 있습니다.')])
+    images = MultipleFileField('이미지', validators=[FileAllowed(['jpg', 'png', 'jpeg'], '이미지 파일만 가능합니다.')])
+
+    # 최소한개의 파일을 입력받고, 여러개의 파일을 입력받고 싶을 때
+    # images = MultipleFileField('섬네일 이미지', validators=[InputRequired('이미지 업로드는 필수 항목입니다.'), MultiFileAllowed(['jpg', 'png', 'jpeg'], 'jpg, png, jpeg 파일만 업로드 할 수 있습니다.')])
+
+class JoinRequestForm(FlaskForm):
+    message_title = StringField('제목', validators=[DataRequired('제목은 필수 항목입니다.'), Length(message="메세지는 최대 100글자 입니다.", max=100)])
+    message_content = TextAreaField('메세지', validators=[DataRequired('메세지는 필수 항목입니다.')])
+    
+
+
                 
 class UserCreateForm(FlaskForm):
-    username = StringField('사용자이름', validators=[DataRequired(message='이름은 2~15자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])
+    username = StringField('사용자이름', validators=[DataRequired(message='사용자이름은 필수 항목입니다.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])
     email = EmailField('이메일', validators=[DataRequired(), Email(message='유효한 이메일 주소를 입력하세요')])
-    userID = StringField('유저 아이디', validators=[DataRequired(message='이름은 5~20자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=5, max=20)])
+    userID = StringField('유저 아이디', validators=[DataRequired(message='유저 아이디는 필수 항목입니다. '), Length(message='이름은 5~15자리로 지어주세요.', min=5, max=20)])
     password1 = PasswordField('비밀번호', validators=[DataRequired(message='비밀번호를 입력해 주세요'), EqualTo('password2', '비밀번호가 일치하지 않습니다')])
     password2 = PasswordField('비밀번호확인', validators=[DataRequired(message='비밀번호를 입력해 주세요')])
     
