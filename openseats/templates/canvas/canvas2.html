@@ -7,7 +7,7 @@
 
 <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
-
+<script type="module" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
 <div class="container-fluid">
   <div class="row">
     
@@ -81,16 +81,11 @@
       <!-- You can add your sidebar elements inside this div -->
     </div>
     <div id="work-space" class="col-md-10">
+      <img id="preview"/>
       <!-- Konva canvas container -->
       <div id="large-container">
-        <img id="preview"/>
         <div id="konva-canvas"></div>
-        <script type="module" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
-
       </div>
-      <div id="konva-previewStage"></div>
-
-      
     </div>
   </div>
 </div>
