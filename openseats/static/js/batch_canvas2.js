@@ -25,7 +25,7 @@ function tr_nodes_select_update(nodes) {
   }
 }
 function updatePreview() {
-  const scale = 1 / 4;
+  const scale = 1 / 6;
   // use pixelRatio to generate smaller preview
   const url = stage.toDataURL({ pixelRatio: scale });
   document.getElementById('preview').src = url;
