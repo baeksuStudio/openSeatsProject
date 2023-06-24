@@ -45,15 +45,17 @@
           <td class="align-middle">
             <img src="{{ url_for('feature.get_profile_image', user_id=group.reservation[i].user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
           </td>
-          <td class="align-middle">{{ group.reservation[i].user.username }}</td>
+          <td class="align-middle">
+            <a class="a fw-bold" href="{{ url_for('main.my_page', username=group.owner.userID) }}">
+            {{ group.reservation[i].user.username }}
+            </a>
+          </td>
           <td class="align-middle">{{ group.reservation[i].user.email }}</td>
           <td class="align-middle">{{ group.reservation[i].user.userID }}</td>
           <td class="align-middle">{{ group.reservation[i].created_at.strftime('%Y/%m/%d') }}</td>
           <td class="align-middle">
-              <a class="btn btn-primary align-middle" href="{{ url_for('main.my_page', username=group.reservation[i].user.userID)}}">
-                확인
-              </a>
-              <button type="button" class="btn btn-danger" style="font-size: 15px;">방출</button>
+            <button class="btn btn-primary"><i class="bi bi-gear-fill"></i></button>
+            <button type="button" class="btn btn-danger" style="font-size: 15px;"><i class="bi bi-x-lg"></i></button>
           </td>
         </tr>
         {% endfor %}
