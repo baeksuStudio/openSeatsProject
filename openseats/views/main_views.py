@@ -16,6 +16,16 @@ bp = Blueprint('main', __name__, url_prefix='/')
 def main_page() :
     return render_template('main.html')
 
+@bp.route('/canvas')
+def canvas_page() :
+    return render_template('canvas/canvas.html')
+@bp.route('/canvas2')
+def canvas_page2() :
+    return render_template('canvas/canvas2.html')
+@bp.route('/canvas3')
+def canvas_page3() :
+    return render_template('canvas/canvas3.html')
+
 
 @bp.route('/<string:username>')
 def my_page(username) :

@@ -56,6 +56,8 @@ class UserCreateForm(FlaskForm):
     
 
 class UserEditForm(FlaskForm):
+    photoUpload = FileField('사진 업로드', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+
     Nowpassword = PasswordField('현재 비밀번호', validators=[DataRequired(message='비밀번호를 입력해 주세요')])
     
     Editusername = StringField('사용자이름', validators=[DataRequired(message='이름은 2~15자리로 지어주세요.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])
@@ -65,8 +67,7 @@ class UserEditForm(FlaskForm):
     Editpassword1 = PasswordField('비밀번호', validators=[Optional(), EqualTo('Editpassword2', '비밀번호가 일치하지 않습니다')])
     Editpassword2 = PasswordField('비밀번호확인', validators=[Optional()])
 
-    photoUpload = FileField('사진 업로드', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-
+    
 
 
 

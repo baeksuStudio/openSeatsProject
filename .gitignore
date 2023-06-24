@@ -6,6 +6,7 @@ migrations
 .env
 bin
 lib
+include
 uploads/
 profile/
 pyvenv.cfg

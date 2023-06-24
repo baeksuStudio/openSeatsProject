@@ -1,0 +1,43 @@
+#side-space {
+    background-color: #ffffff;
+    overflow: auto;
+    border-top: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
+    border-right: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
+}
+#large-container {
+    width: 3000px;
+    height: 2000px;
+    position: relative;
+    overflow: hidden;
+}
+
+#work-space {
+    background-color: #f8f9fa;
+    height: 1000px;
+    overflow: auto;
+
+
+    border-top: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
+    border-bottom: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
+}
+
+.side-space-menubar {
+    margin: 10px;
+    padding: 10px;
+}
+#konva-previewStage{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border: 1px solid grey;
+    background-color: lightgrey;
+}
+#preview {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border: 1px solid grey;
+    background-color: lightgrey;
+}
