@@ -1,29 +1,52 @@
 import {stage, layer} from './set_screen.js';
 
+
+
+// 선택된 객체를 객체 수정 select태그에 보여줌
 function tr_nodes_select_update(nodes) {
   var selectElement = document.querySelector('#select-object');
 
   selectElement.innerHTML = '';
 
-  // 기본으로 선택되도록 설정
-  var defaultOption = document.createElement('option');
-  defaultOption.textContent = "선택된 객체";
-  defaultOption.selected = true; 
-
-  selectElement.appendChild(defaultOption);
-  for (var i = 0; i < nodes.length; i++) {
-    var optionElement = document.createElement('option');
-    optionElement.value = i + 1;
-    optionElement.textContent = nodes[i].attrs.objectName;
-    selectElement.appendChild(optionElement);
-  }
-
+  // 1개 이상일때, 객체만 보여줌
   if (nodes.length >= 1) {
+    for (var i = 0; i < nodes.length; i++) {
+      var optionElement = document.createElement('option');
+      optionElement.value = i + 1;
+      optionElement.textContent = nodes[i].attrs.objectName;
+      selectElement.appendChild(optionElement);
+    }
     console.log(nodes[0].attrs)
-
-
   }
+  else {
+    var defaultOption = document.createElement('option');
+    defaultOption.textContent = "객체를 선택하세요";
+    defaultOption.selected = true; 
+  
+    selectElement.appendChild(defaultOption);
+  
+  }
+
+
+
 }
+var selectObjectName = document.querySelector('#select-object');
+selectObjectName.addEventListener('change', function(event) {
+  var selectedValue = event.target.value;
+  var selectedNode = tr.nodes().find(function(node) {
+    return node.attrs.objectName === selectedValue;
+  });
+  
+  if (selectedNode) {
+    tr.nodes([selectedNode]); // 선택된 객체로 tr.nodes를 업데이트합니다.
+    tr_nodes_select_update(tr.nodes())
+  } 
+
+  console.log(selectedValue)
+})
+
+
+
 function updatePreview() {
   const scale = 1 / 6;
   // use pixelRatio to generate smaller preview
@@ -31,6 +54,13 @@ function updatePreview() {
   document.getElementById('preview').src = url;
 }
 
+// 모든 객체 선택
+var selectAllButton = document.getElementById('select-all-object');
+selectAllButton.addEventListener('click', function() {
+  var shapes = stage.find('.object');
+  tr.nodes(shapes);
+  tr_nodes_select_update(tr.nodes());
+});
 
 var addObjectBtn = document.getElementById('add-object-btn');
 addObjectBtn.addEventListener('click', function(event) {
@@ -227,6 +257,7 @@ stage.on('click tap', function (e) {
     // remove node from array
     nodes.splice(nodes.indexOf(e.target), 1);
     tr.nodes(nodes);
+    
     tr_nodes_select_update(tr.nodes())
     
   } else if (metaPressed && !isSelected) {

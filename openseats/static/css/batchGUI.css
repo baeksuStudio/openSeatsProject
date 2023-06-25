@@ -15,7 +15,7 @@
     height: 1000px;
     overflow: auto;
 
-
+    
     border-top: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
     border-bottom: 1px solid #dee2e6; /* 세로 경계줄 스타일 */
 }
@@ -28,7 +28,7 @@
 }
 
 #preview {
-    position: sticky;
+    position: relative;
     top: 2px;
     left: 2px;
     
