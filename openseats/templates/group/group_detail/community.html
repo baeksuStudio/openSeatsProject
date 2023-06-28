@@ -17,6 +17,8 @@
   }
 </style>
 
+
+<!-- Post Form -->
 <div class="card">
   <div class="card-body">
     <div class="card-profile d-flex">
@@ -30,10 +32,11 @@
             <h6 class="card-subtitle mb-2 text-body-secondary">{{ g.user.email }}</h6>
         </div>
     </div>
-    <form>
-      <textarea class="form-control mb-2" placeholder="게시글을 작성하세요." rows="3"></textarea>
+    <form method="POST" action="{{ url_for('group.post_community', group_id=group.id)}} ">
+      {{ form.csrf_token }}
+      <textarea class="form-control mb-2" id="content" name="content" placeholder="게시글을 작성하세요." rows="3"></textarea>
       <div class="options-left d-flex gap-3">
-        <div class="like d-flex"><button type="button" class="btn btn-primary">작성</button></div>
+        <div class="like d-flex"><button type="submit" class="btn btn-primary">작성</button></div>
         <div class="like d-flex"><button type="button" class="btn btn-secondary">취소</button></div>
       </div>
     </form>
@@ -44,7 +47,8 @@
 
 
 
-
+<!-- Posts -->
+{% for i in range(0, group.community_posts|length) %}
 <div class="card">
   <div class="card-body">
     <div class="card-profile d-flex">
@@ -52,13 +56,13 @@
         <div class="card-profile-info">
           <h5 class="card-title d-flex fw-bold">
               <a class="a" class="fw-bold"  href="{{ url_for('main.my_page', username='ohinsu134')}}">
-              Insu Oh
+              {{ group.community_posts[i].user.username }}
               </a>
             </h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">ohinsu134@gmail.com</h6>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{ group.community_posts[i].user.email }}</h6>
         </div>
     </div>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <p class="card-text">{{ group.community_posts[i].content }}</p>
     <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
   </div>
   <div class="card-footer options text-body-secondary bg-white d-flex justify-content-between">
@@ -67,7 +71,7 @@
         <!-- <i class="bi bi-hand-thumbs-up-fill"></i> -->
       <div class="dislike d-flex"><i class="bi bi-hand-thumbs-down"></i><p>7</p></div>
         <!-- <i class="bi bi-hand-thumbs-down-fill"></i> -->
-      <div class="comment d-flex comment-toggle-button" data-post-id="0"><i class="bi bi-chat"></i><p>13</p></div>
+      <div class="comment d-flex comment-toggle-button" data-post-id="{{i}}"><i class="bi bi-chat"></i><p>13</p></div>
       <!-- <div class="comment d-flex" id="comment-toggle" data-post-id="{{ post_id }}"><i class="bi bi-chat"></i><p>13</p></div> -->
     </div>
     <div class="options-left d-flex gap-3">
@@ -76,7 +80,7 @@
     </div>
 
   </div>
-  <div class="card-comments border-top" id="comments-0" style="display: none;">
+  <div class="card-comments border-top" id="comments-{{i}}" style="display: none;">
     <!-- <div class="card-comments" id="comments-{{ post_id }}"> -->
       <ul class="list-group list-group-flush">
         <li class="list-group-item">An item</li>
@@ -85,6 +89,7 @@
       </ul>
   </div>
 </div>
+{% endfor %}
 
 
 <script>

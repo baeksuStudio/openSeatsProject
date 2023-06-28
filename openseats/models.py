@@ -66,6 +66,9 @@ class Community_post(db.Model):
     content = db.Column(db.Text, nullable=False)
     likes = db.relationship('User', lazy='subquery', backref=db.backref('liked_posts', lazy=True))
     dislikes = db.relationship('User', lazy='subquery',backref=db.backref('disliked_posts', lazy=True))
+    
+    user = db.relationship('User', backref='community_posts')
+    group = db.relationship('Group', backref='community_posts')
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)

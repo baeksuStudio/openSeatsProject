@@ -3,8 +3,8 @@ from datetime import datetime
 from werkzeug.utils import secure_filename, redirect
 from openseats import db
 # from __main__ import app
-from openseats.models import Group, Image, Reservation, User, JoinRequest
-from openseats.forms import GroupForm, JoinRequestForm
+from openseats.models import Group, Image, Reservation, User, JoinRequest, Community_post
+from openseats.forms import GroupForm, JoinRequestForm, CommunityPostForm
 from .auth_views import login_required  
 
 import os
@@ -165,6 +165,24 @@ def reject_join_request(join_request_id):
 
 
     
+@bp.route('/post_community/<int:group_id>', methods=['POST'])
+@login_required
+def post_community(group_id):
+    form = CommunityPostForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        # 새로운 Group 모델 객체 생성
+        community_post = Community_post(
+            user_id = g.user.id,
+            group_id = group_id,
+            content = form.content.data
+            )
+        db.session.add(community_post)
+        db.session.commit()
+
+
+        flash('성공적으로 게시글이 작성 되었습니다..', category='primary')
+        return redirect(url_for('group.detail_page', group_id=group_id))
+    return redirect(url_for('group.detail_page', group_id=group_id))
 
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
