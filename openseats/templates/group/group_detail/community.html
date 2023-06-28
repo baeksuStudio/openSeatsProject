@@ -12,7 +12,37 @@
     margin-right: 3px;
     cursor: pointer;
   }
+  .card {
+    margin-bottom: 15px;
+  }
 </style>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-profile d-flex">
+        <img src="{{ url_for('feature.get_profile_image', user_id=g.user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+        <div class="card-profile-info">
+          <h5 class="card-title d-flex fw-bold">
+              <a class="a" class="fw-bold"  href="{{ url_for('main.my_page', username='ohinsu134')}}">
+              {{ g.user.username }}
+              </a>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{ g.user.email }}</h6>
+        </div>
+    </div>
+    <form>
+      <textarea class="form-control mb-2" placeholder="게시글을 작성하세요." rows="3"></textarea>
+      <div class="options-left d-flex gap-3">
+        <div class="like d-flex"><button type="button" class="btn btn-primary">작성</button></div>
+        <div class="like d-flex"><button type="button" class="btn btn-secondary">취소</button></div>
+      </div>
+    </form>
+    <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+  </div>
+
+</div>
+
+
 
 
 <div class="card">

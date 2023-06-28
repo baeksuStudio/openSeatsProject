@@ -58,14 +58,28 @@ class Reservation(db.Model):
     user = db.relationship('User', backref='reservation')
     group = db.relationship('Group', backref='reservation')
 
-# class Community_post(db.Model):
+class Community_post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    likes = db.relationship('User', lazy='subquery', backref=db.backref('liked_posts', lazy=True))
+    dislikes = db.relationship('User', lazy='subquery',backref=db.backref('disliked_posts', lazy=True))
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+class Dislike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True)
 
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     
-
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
