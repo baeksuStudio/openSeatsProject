@@ -55,7 +55,6 @@ class JoinRequestForm(FlaskForm):
 
 class CommunityPostForm(FlaskForm):
     content = StringField('내용', validators=[DataRequired('내용은 필수 항목입니다.'), Length(message='내용은 최소 5~200자 사이로 입력해주세요.', min=5, max=200)])
-
                 
 class UserCreateForm(FlaskForm):
     username = StringField('사용자이름', validators=[DataRequired(message='사용자이름은 필수 항목입니다.'), Length(message='이름은 2~15자리로 지어주세요.', min=2, max=15)])

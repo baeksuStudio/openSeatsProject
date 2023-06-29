@@ -69,11 +69,11 @@ class Community_post(db.Model):
     
     user = db.relationship('User', backref='community_posts')
     group = db.relationship('Group', backref='community_posts')
-class Like(db.Model):
+class Group_like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True)
-class Dislike(db.Model):
+class Group_dislike(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True)

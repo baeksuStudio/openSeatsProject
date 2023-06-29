@@ -168,21 +168,27 @@ def reject_join_request(join_request_id):
 @bp.route('/post_community/<int:group_id>', methods=['POST'])
 @login_required
 def post_community(group_id):
+    # 고쳐야 될점
+    # 1. form validate 통과하지 못했을 때 => flash 사용
     form = CommunityPostForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        # 새로운 Group 모델 객체 생성
-        community_post = Community_post(
-            user_id = g.user.id,
-            group_id = group_id,
-            content = form.content.data
-            )
-        db.session.add(community_post)
-        db.session.commit()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # 새로운 Group 모델 객체 생성
+            community_post = Community_post(
+                user_id = g.user.id,
+                group_id = group_id,
+                content = form.content.data
+                )
+            db.session.add(community_post)
+            db.session.commit()
 
 
-        flash('성공적으로 게시글이 작성 되었습니다..', category='primary')
-        return redirect(url_for('group.detail_page', group_id=group_id))
-    return redirect(url_for('group.detail_page', group_id=group_id))
+            flash('성공적으로 게시글이 작성 되었습니다..', category='primary')
+            return redirect(url_for('group.detail_page', group_id=group_id))
+        else:
+            flash('The number of text for the community post should be between 5~200.', category='danger')
+            return redirect(url_for('group.detail_page', group_id=group_id, form=form))
+    return redirect(url_for('group.detail_page', group_id=group_id, form=form))
 
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
