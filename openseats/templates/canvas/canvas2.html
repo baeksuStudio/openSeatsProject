@@ -8,84 +8,64 @@
 <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 
 <script type="module" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
+
+<script type="module" src="{{ url_for('static', filename='/js/canvas_sidebar.js') }}"></script>
 <div class="container-fluid">
   <div class="row">
-    
     <div id="side-space" class="col-md-2">
       <div class="mb-3"></div>
-      <!-- side bar alert메세지 -->
-      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="selected-option-alert">
-        <strong>추가 오류!</strong> 객체 모양을 선택해주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div class="btn-toolbar justify-content-between d-flex" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm flex-grow-1" id="sidebar-header" role="group" aria-label="Basic radio toggle button group">
+          <div class="form-check form-switch form-switch">
+            <input class="form-check-input" id="preview-on/off" type="checkbox" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">배치 화면 미리보기 On/Off</label>
+          </div>
+        </div>
+      
       </div>
-      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-name-alert">
-        <strong>추가 오류!</strong> 객체 이름을 입력해 주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      
+
+      <div class="mb-3"></div>
+      <div class="btn-toolbar justify-content-between d-flex" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm flex-grow-1" id="sidebar-menu" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+          <label class="btn btn-outline-primary" for="btnradio1">만들기</label>
+      
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio2">수정하기</label>
+      
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio3">화면설정</label>
+        </div>
       </div>
-      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-width-alert">
-        <strong>추가 오류!</strong> 객체 너비를 입력해 주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div id="create-section" class="section">
+        {% include 'canvas/canvas-sidebar-create.html' %}
       </div>
-      <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="input-object-height-alert">
-        <strong>추가 오류!</strong> 객체 높이를 입력해 주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      
+      <div id="edit-section" class="section">
+        {% include 'canvas/canvas-sidebar-edit.html' %}
+      </div>
+      
+      <div id="settings-section" class="section">
+        {% include 'canvas/canvas-sidebar-settings.html' %}
       </div>
 
-      <div class="alert alert-warning alert-dismissible fade show d-none" role="alert" id="input-object-width-size-alert">
-        <strong>추가 오류!</strong> 너비는 50이상 500이하로 해주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      <div class="alert alert-warning alert-dismissible fade show d-none" role="alert" id="input-object-height-size-alert">
-        <strong>추가 오류!</strong> 높이는 50이상 500이하로 해주세요
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      <!-- 끝 -->
-      
-      <div class="side-space-menubar create">
-        <h4 class="mb-3">객체 만들기</h4>
-        <div id="make-object" class="mb-3">
-          <label for="input-object-name" class="form-label">객체 모양 선택<span class="text-danger">*</span></label>
-          <select class="form-select" aria-label="object select">
-            <option selected>모양 선택</option>
-            <option value="1">네모</option>
-            <option value="2">텍스트</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="input-object-name" class="form-label">객체 이름<span class="text-danger">*</span></label>
-          <input type="text" class="form-control" id="input-object-name" placeholder="객체 이름 지정">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">크기<span class="text-danger">*</span></label>
-          <input type="number" min="1" class="form-control mb-3" id="input-object-width" placeholder="너비 (50이상500이하)">
-          <input type="number" min="1" class="form-control" id="input-object-height" placeholder="높이 (50이상500이하)">
-        </div>
-        <div class="mb-3">
-          <label for="color-input" class="form-label">색 선택<span class="text-danger">*</span></label>
-          <input type="color" class="form-control form-control-color" id="color-input" value="#563d7c" title="Choose your color">
-        </div>
-        <div class="d-flex justify-content-end">
-          <button class="btn btn-primary" id="add-object-btn">객체 추가</button>
-        </div>
-      </div>
-      <hr>
-      <div class="side-space-menubar edit">
-        <h4>객체 수정</h4>
-        <div id="edit-object" class="mb-3">
-          <select id="select-object" class="form-select mb-3" aria-label=".form-select-lg example">
-            <option selected>객체를 선택하세요</option>
-          </select>
-        <button class="btn btn-primary" id="select-all-object">모든 객체 선택</button>
-        </div>
-      </div>
       
       <!-- Sidebar content here -->
       <!-- You can add your sidebar elements inside this div -->
     </div>
     <div id="work-space" class="col-md-10">
-      <img id="preview"/>
+      <div class="btn-group btn-group-sm mb-3" role="group" aria-label="Single button group">
+
+      </div>
       <!-- Konva canvas container -->
       <div id="large-container">
+        <button type="button" id="sidebar-on-off" class="btn btn-outline-secondary me-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar" viewBox="0 0 16 16">
+            <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H5zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2V2z"/>
+          </svg>
+        </button>
+        <img id="preview"/>
         <div id="konva-canvas"></div>
       </div>
     </div>

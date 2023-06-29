@@ -28,10 +28,16 @@
 }
 
 #preview {
-    position: relative;
+    position: absolute;
     top: 2px;
-    left: 2px;
+    left: 50px;
     
     border: 1px solid grey;
     background-color: lightgrey;
 }
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  box-shadow: none;
+}
+
+
