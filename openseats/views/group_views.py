@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, url_for, request, current_app, g, abort, flash
+from flask import Blueprint, render_template, url_for, request, current_app, g, abort, flash, jsonify
 from datetime import datetime
 from werkzeug.utils import secure_filename, redirect
 from openseats import db
 # from __main__ import app
-from openseats.models import Group, Image, Reservation, User, JoinRequest, Community_post
+from openseats.models import Group, Image, Reservation, User, JoinRequest, Community_post, Community_Like
 from openseats.forms import GroupForm, JoinRequestForm, CommunityPostForm
 from .auth_views import login_required  
 
@@ -168,8 +168,6 @@ def reject_join_request(join_request_id):
 @bp.route('/post_community/<int:group_id>', methods=['POST'])
 @login_required
 def post_community(group_id):
-    # 고쳐야 될점
-    # 1. form validate 통과하지 못했을 때 => flash 사용
     form = CommunityPostForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -186,10 +184,46 @@ def post_community(group_id):
             flash('성공적으로 게시글이 작성 되었습니다..', category='primary')
             return redirect(url_for('group.detail_page', group_id=group_id))
         else:
+            # When it's not valid
             flash('The number of text for the community post should be between 5~200.', category='danger')
             return redirect(url_for('group.detail_page', group_id=group_id, form=form))
     return redirect(url_for('group.detail_page', group_id=group_id, form=form))
 
+
+# Community Post Like Feature
+# @bp.route('/community/<int:post_id>/like', methods=['POST'])
+# @login_required
+# def like_community_post(post_id):
+#     user_id = g.user.id 
+
+#     if not Community_Like.query.filter_by(user_id=user_id, post_id=post_id).all():
+#         community_like = Community_Like(
+#             user_id = user_id,
+#             post_id = post_id
+#         )
+#         db.session.add(community_like)
+#         db.session.commit()
+#         return jsonify({'message': 'Post liked successfully'})
+#     else:
+#         return jsonify({'message': 'Post already liked by the user'})
+
+# Community Post Like Feature2
+@bp.route('/detail/community/like', methods=['POST'])
+@login_required
+def like_community_post():
+    post_id = request.form['post_id']
+    user_id = g.user.id 
+
+    if not Community_Like.query.filter_by(user_id=user_id, post_id=post_id).all():
+        community_like = Community_Like(
+            user_id = user_id,
+            post_id = post_id
+        )
+        db.session.add(community_like)
+        db.session.commit()
+        return jsonify({'msg': 'Post liked successfully'})
+    else:
+        return jsonify({'msg': 'Post already liked by the user'})
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
 # @bp.route('/create/', methods=('GET', 'POST'))

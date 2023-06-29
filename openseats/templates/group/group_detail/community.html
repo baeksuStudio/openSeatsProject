@@ -65,7 +65,7 @@
   </div>
   <div class="card-footer options text-body-secondary bg-white d-flex justify-content-between">
     <div class="options-left d-flex gap-3">
-      <div class="like d-flex"><i class="bi bi-hand-thumbs-up"></i><p>43</p></div>
+      <div class="like d-flex" data-post-index="{{i}}" data-post-id="{{group.community_posts[i].id}}" data-user-id="{{ group.community_posts[i].user_id}}"><i class="bi bi-hand-thumbs-up"></i><p>43</p></div>
         <!-- <i class="bi bi-hand-thumbs-up-fill"></i> -->
       <div class="dislike d-flex"><i class="bi bi-hand-thumbs-down"></i><p>7</p></div>
         <!-- <i class="bi bi-hand-thumbs-down-fill"></i> -->
@@ -106,4 +106,43 @@
     }
   });
 
+// 좋아요 버튼 클릭 시
+document.addEventListener('DOMContentLoaded', function() {
+  var likeButtons = document.getElementsByClassName('like');
+  for (var i = 0; i < likeButtons.length; i++) {
+    likeButtons[i].addEventListener('click', function() {
+    var postIndex = this.getAttribute('data-post-id');
+    var postId = this.getAttribute('data-post-id')
+    var endpoint = 'community/like';
+
+//     $.ajax({
+//         type : 'POST',                                 
+//         url : '/=',
+//         data : {
+//                 post_id:postId                       
+//         },
+//         dataType : 'JSON',
+//         success : function(result){
+//                 alert("result = "+ result);
+//         },
+//         error : function(xtr,status,error){
+//                 alert(xtr +":"+status+":"+error);
+//         }
+// });
+
+    $.ajax({
+        type: 'POST',
+        url: endpoint,
+        data: {
+            post_id : postId
+        },
+        success: function (response) {
+            alert(response['msg']);
+            
+        }
+    });
+
+    });
+  }
+});
 </script>
