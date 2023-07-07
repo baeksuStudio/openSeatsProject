@@ -1,29 +1,97 @@
 import {stage, layer} from './set_screen.js';
 
+
+// 선택된 객체들을 삭제하는 함수
+function deleteSelectedObjects() {
+  // 현재 선택된 객체들 가져오기
+  var selectedObjects = tr.nodes();
+
+  // 선택된 객체들을 삭제
+  selectedObjects.forEach(function (selectedObject) {
+    selectedObject.destroy();
+  });
+
+  // Transformer에서 선택 해제
+  tr.detach();
+  layer.draw();
+}
+
+
+// 붙여넣기할 객체를 저장할 변수
+var copiedObjects = [];
+
+// 선택된 객체들을 복사하는 함수
+function copySelectedObjects() {
+  // 현재 선택된 객체들 가져오기
+  var selectedObjects = tr.nodes();
+
+  // 선택된 객체들이 있을 경우에만 복사
+  if (selectedObjects.length > 0) {
+    // 객체들을 복사하여 새로운 배열 생성
+    copiedObjects = selectedObjects.map(function (shape) {
+      return shape.clone();
+    });
+
+    // 복사된 객체들의 위치 조정 (예: 오른쪽으로 이동)
+    copiedObjects.forEach(function (copiedObject) {
+      copiedObject.x(copiedObject.x() + 10);
+    });
+
+    // Transformer에서 선택 해제
+    tr.detach();
+  }
+}
+// 붙여넣기
+function pasteObjects() {
+  // 복사된 객체들을 레이어에 추가하고 화면을 다시 그리기
+  var pastedObjects = [];
+  copiedObjects.forEach(function (copiedObject) {
+    // 개별 객체를 복사하여 생성
+    var clonedObject = copiedObject.clone();
+
+    // 복사된 객체의 위치 조정 (예: 오른쪽으로 이동)
+    clonedObject.x(clonedObject.x() + 10);
+
+    // 복사된 객체를 레이어에 추가
+    layer.add(clonedObject);
+    pastedObjects.push(clonedObject);
+  });
+
+  // Transformer를 붙여넣은 객체들에 연결
+  tr.nodes(pastedObjects);
+  tr.moveToTop(); // tr 객체 위로 올려줌
+
+  layer.draw();
+}
+
+
+// 키보드 이벤트 리스너 등록
+window.addEventListener('keydown', function (e) {
+  // Ctrl+C 키 조합
+  if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
+    copySelectedObjects();
+  }
+
+  // Ctrl+V 키 조합
+  if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+    pasteObjects();
+  }
+
+  // Delete 키
+  if (e.key === 'Delete') {
+    deleteSelectedObjects();
+  }
+});
+
+// 선택된 객체를 객체 수정 select태그에 보여줌
 function tr_nodes_select_update(nodes) {
   var selectElement = document.querySelector('#select-object');
 
-  selectElement.innerHTML = '';
 
-  // 기본으로 선택되도록 설정
-  var defaultOption = document.createElement('option');
-  defaultOption.textContent = "선택된 객체";
-  defaultOption.selected = true; 
-
-  selectElement.appendChild(defaultOption);
-  for (var i = 0; i < nodes.length; i++) {
-    var optionElement = document.createElement('option');
-    optionElement.value = i + 1;
-    optionElement.textContent = nodes[i].attrs.objectName;
-    selectElement.appendChild(optionElement);
-  }
-
-  if (nodes.length >= 1) {
-    console.log(nodes[0].attrs)
-
-
-  }
 }
+
+
+
 function updatePreview() {
   const scale = 1 / 6;
   // use pixelRatio to generate smaller preview
@@ -31,6 +99,13 @@ function updatePreview() {
   document.getElementById('preview').src = url;
 }
 
+// 모든 객체 선택
+var selectAllButton = document.getElementById('select-all-object');
+selectAllButton.addEventListener('click', function() {
+  var shapes = stage.find('.object');
+  tr.nodes(shapes);
+  tr_nodes_select_update(tr.nodes());
+});
 
 var addObjectBtn = document.getElementById('add-object-btn');
 addObjectBtn.addEventListener('click', function(event) {
@@ -92,18 +167,33 @@ addObjectBtn.addEventListener('click', function(event) {
     document.getElementById("input-object-height-size-alert").classList.add("d-none");
   }
 
-  layer.add(
-    new Konva.Rect({
+  var rectGroup = new Konva.Group({
     x: 100,
     y: 100,
     width: objectWidth,
     height: objectHeight,
-    fill: color,
-    name: 'object',
     draggable: true,
-    }).setAttr('objectName',objectName));
-
-    tr.moveToTop() // tr객체 위로 올려줌
+    name: 'object',
+  }).setAttr('objectName', objectName);
+  rectGroup.add(
+    new Konva.Rect({
+    width: objectWidth,
+    height: objectHeight,
+    fill: color,
+    }));
+  rectGroup.add(
+    new Konva.Text({
+      text: objectName,
+      fontSize: 20,
+      fontFamily: 'Calibri',
+      width: objectWidth,
+      padding: 5,
+      align: 'center',
+    }));
+    layer.add(rectGroup)
+    console.log(rectGroup)
+    updatePreview();
+    tr.moveToTop(); // tr객체 위로 올려줌
 });
 updatePreview();
 var GUIDELINE_OFFSET = 5;
@@ -206,37 +296,41 @@ stage.on('click tap', function (e) {
   }
 
   // do nothing if clicked NOT on our rectangles
-  if (!e.target.hasName('object')) {
+  if (!e.target.hasName('object') && !e.target.getParent().hasName('object')) {
     return;
   }
-  
+  // 선택된 객체
+  var selectedObject = e.target.hasName('object') ? e.target : e.target.getParent();
+
   // do we pressed shift or ctrl?
   const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
-  const isSelected = tr.nodes().indexOf(e.target) >= 0;
-  
+  const isSelected = tr.nodes().indexOf(selectedObject) >= 0;
+
   if (!metaPressed && !isSelected) {
     // if no key pressed and the node is not selected
     // select just one
-    tr.nodes([e.target]);
-    tr_nodes_select_update(tr.nodes())
+    tr.nodes([selectedObject]);
+    tr_nodes_select_update(tr.nodes());
   } else if (metaPressed && isSelected) {
     // if we pressed keys and node was selected
     // we need to remove it from selection:
 
     const nodes = tr.nodes().slice(); // use slice to have new copy of array
     // remove node from array
-    nodes.splice(nodes.indexOf(e.target), 1);
+    nodes.splice(nodes.indexOf(selectedObject), 1);
     tr.nodes(nodes);
-    tr_nodes_select_update(tr.nodes())
-    
+
+    tr_nodes_select_update(tr.nodes());
+
   } else if (metaPressed && !isSelected) {
     // add the node into selection
-    const nodes = tr.nodes().concat([e.target]);
+    const nodes = tr.nodes().concat([selectedObject]);
     tr.nodes(nodes);
-    tr_nodes_select_update(tr.nodes())
+    tr_nodes_select_update(tr.nodes());
   }
+
   if (tr.nodes().length >= 1) {
-    tr_nodes_select_update(tr.nodes())
+    tr_nodes_select_update(tr.nodes());
   }
 });
 
