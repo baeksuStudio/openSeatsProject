@@ -4,16 +4,6 @@ import os
 from datetime import datetime
 
 
-# original
-# class Group(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     address = db.Column(db.String(200), nullable=False)
-#     description = db.Column(db.String(200), nullable=False)
-#     name = db.Column(db.String(200), nullable=False)
-#     money_per_hour = db.Column(db.Integer, nullable=False)
-#     create_date = db.Column(db.DateTime(), nullable=False)
-#     image_path = db.Column(db.String(200), nullable=False)
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -64,22 +54,25 @@ class Community_post(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    likes = db.relationship('User', lazy='subquery', backref=db.backref('liked_posts', lazy=True))
-    dislikes = db.relationship('User', lazy='subquery',backref=db.backref('disliked_posts', lazy=True))
+    # likes = db.relationship('Community_like', lazy='subquery', backref=db.backref('liked_posts', lazy=True))
+    # dislikes = db.relationship('Community_dislike', lazy='subquery',backref=db.backref('disliked_posts', lazy=True))
     
     user = db.relationship('User', backref='community_posts')
     group = db.relationship('Group', backref='community_posts')
 class Community_Like(db.Model):
     # id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    post_id = db.Column('post_id', db.Integer, db.ForeignKey('community_post.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('community_post.id'), primary_key=True)
 
     user = db.relationship('User', backref='likes')
+    post = db.relationship('Community_post', backref='likes')
 class Community_Dislike(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    # id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('community_post.id'), primary_key=True)
 
+    user = db.relationship('User', backref='dislikes')
+    post = db.relationship('Community_post', backref='dislikes')
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)

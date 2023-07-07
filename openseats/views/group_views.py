@@ -223,7 +223,9 @@ def like_community_post():
         db.session.commit()
         return jsonify({'msg': 'Post liked successfully'})
     else:
-        return jsonify({'msg': 'Post already liked by the user'})
+        return jsonify({'msg': 'Post already liked by the user'}), 404
+
+
 
 # (테스트용) 여러개의 group을 만들때 사용하는 테스트 함수
 # @bp.route('/create/', methods=('GET', 'POST'))
