@@ -1,0 +1,175 @@
+
+<style>
+  .options > div > div > p {
+    display: block;
+    height: fit-content;
+    margin-bottom: 0;
+  }
+  .card-footer > div {
+    cursor: pointer;
+  }
+  i {
+    margin-right: 3px;
+    cursor: pointer;
+  }
+  .card {
+    margin-bottom: 15px;
+  }
+  .bi-heart-fill {
+    border: none;
+    color: #c7241a;
+  }
+</style>
+
+<!-- Post Form -->
+<div class="card">
+  <div class="card-body">
+    <div class="card-profile d-flex">
+        <img src="{{ url_for('feature.get_profile_image', user_id=g.user.id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+        <div class="card-profile-info">
+          <h5 class="card-title d-flex fw-bold mb-1">
+              <a class="a" class="fw-bold"  href="{{ url_for('main.my_page', username='ohinsu134')}}">
+              {{ g.user.username }}
+              </a>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{ g.user.email }}</h6>
+        </div>
+    </div>
+    <form method="POST" action="{{ url_for('group.post_community', group_id=group.id)}} ">
+      {{ form.csrf_token }}
+      <textarea class="form-control mb-2" id="content" name="content" placeholder="게시글을 작성하세요." rows="3"></textarea>
+      <div class="options-left d-flex gap-3">
+        <div class="like d-flex"><button type="submit" class="btn btn-primary">작성</button></div>
+      </div>
+    </form>
+    <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+  </div>
+
+</div>
+
+
+
+<!-- Posts -->
+{% for i in range(0, group.community_posts|length)|sort(reverse=True) %}
+<div class="card">
+  <div class="card-body">
+    <div class="card-profile d-flex">
+        <img src="{{ url_for('feature.get_profile_image', user_id=group.community_posts[i].user_id) }}" class="rounded-circle d-block" style="margin-right: 10px;" alt="프로필 사진" width="45" height="45">
+        <div class="card-profile-info">
+          <h5 class="card-title d-flex fw-bold mb-1">
+              <a class="a" class="fw-bold"  href="{{ url_for('main.my_page', username=group.community_posts[i].user.userID)}}">
+              {{ group.community_posts[i].user.username }}
+              </a>
+          </h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">{{ group.community_posts[i].user.email }}</h6>
+        </div>
+    </div>
+    <p class="card-text">{{ group.community_posts[i].content }}</p>
+    <p class="card-text text-muted"><small class="text-body-secondary">
+      {{ group.community_posts[i].created_at.strftime('%Y/%m/%d - %H:%M:%S') }}
+    </small></p>
+  </div>
+  <div class="card-footer options text-body-secondary bg-white d-flex justify-content-between">
+    <div class="options-left d-flex gap-3" >
+      <div class="like d-flex" data-post-id="{{group.community_posts[i].id}}" data-user-id="{{ group.community_posts[i].user_id}}">
+        {% for like in group.community_posts[i].likes if like.user_id == g.user.id %}
+        <i class="bi bi-heart-fill"></i>
+        {% else %}
+        <i class="bi bi-heart"></i>
+        {% endfor %}
+        <p>{{ group.community_posts[i].likes|length }}</p>
+      </div>
+      <!-- <i class="bi bi-hand-thumbs-up-fill"></i> -->
+      
+      <div class="comment d-flex comment-toggle-button" data-post-id="{{i}}"><i class="bi bi-chat"></i><p>0</p></div>
+      <!-- <div class="comment d-flex" id="comment-toggle" data-post-id="{{ post_id }}"><i class="bi bi-chat"></i><p>13</p></div> -->
+    </div>
+    {% if g.user.id == group.community_posts[i].user_id %}
+    <div class="options-right d-flex gap-3">
+      <div class="modify d-flex"><i class="bi bi-pencil-square"></i></div>
+      <div class="delete d-flex"><i class="bi bi-trash3-fill"></i></i></div>
+    </div>
+    {% endif %}
+
+  </div>
+  
+  <div class="card-comments border-top" id="comments-{{i}}" style="display: none;">
+    <!-- <div class="card-comments" id="comments-{{ post_id }}"> -->
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">An item</li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+      </ul>
+  </div>
+</div>
+{% endfor %}
+
+
+<script>
+  //Comment 버튼 클릭 이벤트 핸들러
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggleButtons = document.getElementsByClassName('comment-toggle-button');
+    for (var i = 0; i < toggleButtons.length; i++) {
+      toggleButtons[i].addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        var comments = document.getElementById('comments-' + postId);
+        comments.style.display = (comments.style.display === 'none') ? 'block' : 'none';
+      });
+    }
+  });
+
+// 좋아요 버튼 클릭 시
+// document.addEventListener('DOMContentLoaded', function() {
+//   var likeButtons = document.getElementsByClassName('like');
+//   for (var i = 0; i < likeButtons.length; i++) {
+//     likeButtons[i].addEventListener('click', function() {
+//     var postId = this.getAttribute('data-post-id')
+//     var endpoint = 'community/like';
+
+//     $.ajax({
+//         type: 'POST',
+//         url: endpoint,
+//         data: {
+//             post_id : postId
+//         },
+//         success: function (response) {
+//             console.log(response['msg']);     
+//         }
+//     });
+//     });
+//   }
+// });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  var likeButtons = document.getElementsByClassName('like');
+  for (var i = 0; i < likeButtons.length; i++) {
+    likeButtons[i].addEventListener('click', function() {
+      var postId = this.getAttribute('data-post-id');
+      var endpoint = 'community/like';
+      var currentCount = parseInt(this.querySelector('p').innerText);
+
+      var button = this;
+      button.classList.add('disabled');
+      
+      $.ajax({
+        type: 'POST',
+        url: endpoint,
+        data: {
+          post_id: postId
+        },
+        success: function(response) {
+          var newCount = currentCount + 1;
+          button.querySelector('p').innerText = newCount;
+          button.querySelector('i').classList.add('bi-heart-fill');
+          button.querySelector('i').classList.remove('bi-heart');
+        },
+        error: function() {
+          // button.classList.remove('disabled');
+        }
+      });
+    });
+  }
+});
+</script>

@@ -191,8 +191,11 @@
                     </div>
                     <div class="ml-3 w-100" style="margin-left: 10px;">
                       <span class="mb-2">이 그룹의 호스트</span>
-                      <!-- <span>{{ group.owner.email }}</span> -->
-                      <h4 class="mt-1"><a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">{{ group.owner.username }}</a></h4>
+                      <a class="a" href="{{ url_for('main.my_page', username=group.owner.userID) }}">
+                        <div class="d-flex align-items-center">
+                          <h4 class="mt-1">{{ group.owner.username }} </h4><p class="mb-0" style="display: block; height: fit-content;">({{ group.owner.email }})</p>
+                        </div>
+                      </a>
                     </div>
                 </div> 
                 <!-- 두번째, 좋아요 -->
@@ -327,7 +330,9 @@
           <!-- Second content end -->
 
         </div>
-        <div class="tab-pane fade" id="pills-community" role="tabpanel" aria-labelledby="pills-comminuty-tab">community</div>
+        <div class="tab-pane fade" id="pills-community" role="tabpanel" aria-labelledby="pills-comminuty-tab">
+          {% include 'group/group_detail/community.html' %}
+        </div>
         <!-- 그룹장일 경우 관리탭 열람 가능 -->
         {% if join_status == 'owner' %}
         <div class="tab-pane fade" id="pills-manage" role="tabpanel" aria-labelledby="pills-manage-tab">
@@ -336,6 +341,7 @@
         {% endif %}
       </div>
     </div>
+    <!-- Tab End  -->
     <div class="col-md-5">
     </div>
   </div>
