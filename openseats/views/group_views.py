@@ -169,7 +169,7 @@ def reject_join_request(join_request_id):
 @login_required
 def post_community(group_id):
     form = CommunityPostForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and Reservation.query.filter_by(group_id=group_id, user_id=g.user.id).all():
         if form.validate_on_submit():
             # 새로운 Group 모델 객체 생성
             community_post = Community_post(
@@ -187,13 +187,16 @@ def post_community(group_id):
             # When it's not valid
             flash('The number of text for the community post should be between 5~200.', category='danger')
             return redirect(url_for('group.detail_page', group_id=group_id, form=form))
+    flash('You have no access.', category='danger')
     return redirect(url_for('group.detail_page', group_id=group_id, form=form))
 
 
-# Community Post Like Feature
-# @bp.route('/community/<int:post_id>/like', methods=['POST'])
+
+# Community Post Like Feature2
+# @bp.route('/detail/community/like', methods=['POST'])
 # @login_required
-# def like_community_post(post_id):
+# def like_community_post():
+#     post_id = request.form['post_id']
 #     user_id = g.user.id 
 
 #     if not Community_Like.query.filter_by(user_id=user_id, post_id=post_id).all():
@@ -203,27 +206,46 @@ def post_community(group_id):
 #         )
 #         db.session.add(community_like)
 #         db.session.commit()
-#         return jsonify({'message': 'Post liked successfully'})
+#         return jsonify({'msg': 'Post liked successfully'})
 #     else:
-#         return jsonify({'message': 'Post already liked by the user'})
+#         return jsonify({'msg': 'Post already liked by the user'}), 404
 
-# Community Post Like Feature2
+# Community Post Like Feature 3
 @bp.route('/detail/community/like', methods=['POST'])
 @login_required
 def like_community_post():
     post_id = request.form['post_id']
+    group_id = request.form['group_id']
     user_id = g.user.id 
+    is_liked = False
 
-    if not Community_Like.query.filter_by(user_id=user_id, post_id=post_id).all():
-        community_like = Community_Like(
-            user_id = user_id,
-            post_id = post_id
-        )
-        db.session.add(community_like)
-        db.session.commit()
-        return jsonify({'msg': 'Post liked successfully'})
-    else:
-        return jsonify({'msg': 'Post already liked by the user'}), 404
+    # Access validation
+    if Reservation.query.filter_by(group_id=group_id, user_id=user_id).all() or Group.query.filter_by(id=group_id, user_id=user_id).all():
+        # When liked
+        if Community_Like.query.filter_by(user_id=user_id, post_id=post_id).all():
+            # 이미 좋아요가 눌려져 있는 경우, 좋아요 취소 로직 추가
+            community_like = Community_Like.query.filter_by(user_id=user_id, post_id=post_id).first()
+            if community_like:
+                db.session.delete(community_like)
+                db.session.commit()
+            is_liked = False
+        else:
+            # 좋아요 추가 로직 추가
+            if not Community_Like.query.filter_by(user_id=user_id, post_id=post_id).first():
+                community_like = Community_Like(
+                    user_id=user_id,
+                    post_id=post_id
+                )
+                db.session.add(community_like)
+                db.session.commit()
+            is_liked = True
+
+        # 좋아요 수 조회 및 응답
+        likes_count = Community_Like.query.filter_by(post_id=post_id).count()
+        return jsonify({'success': True, 'likes_count': likes_count, 'is_liked': is_liked})
+    return jsonify({'success': False, 'msg': 'No access'}), 404
+
+
 
 
 

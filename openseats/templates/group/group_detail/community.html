@@ -22,6 +22,7 @@
 </style>
 
 <!-- Post Form -->
+{% if join_status == 'already joined' %}
 <div class="card">
   <div class="card-body">
     <div class="card-profile d-flex">
@@ -44,8 +45,8 @@
     </form>
     <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
   </div>
-
 </div>
+{% endif %}
 
 
 
@@ -71,9 +72,9 @@
   </div>
   <div class="card-footer options text-body-secondary bg-white d-flex justify-content-between">
     <div class="options-left d-flex gap-3" >
-      <div class="like d-flex" data-post-id="{{group.community_posts[i].id}}" data-user-id="{{ group.community_posts[i].user_id}}">
+      <div class="like d-flex" data-post-id="{{group.community_posts[i].id}}" data-group-id="{{ group.community_posts[i].group_id}}">
         {% for like in group.community_posts[i].likes if like.user_id == g.user.id %}
-        <i class="bi bi-heart-fill"></i>
+        <i class="bi bi-heart-fill liked"></i>
         {% else %}
         <i class="bi bi-heart"></i>
         {% endfor %}
@@ -119,57 +120,58 @@
   });
 
 // 좋아요 버튼 클릭 시
-// document.addEventListener('DOMContentLoaded', function() {
-//   var likeButtons = document.getElementsByClassName('like');
-//   for (var i = 0; i < likeButtons.length; i++) {
-//     likeButtons[i].addEventListener('click', function() {
-//     var postId = this.getAttribute('data-post-id')
-//     var endpoint = 'community/like';
+  document.addEventListener('DOMContentLoaded', function() {
+    var likeButtons = document.getElementsByClassName('like');
+    for (var i = 0; i < likeButtons.length; i++) {
+      likeButtons[i].addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        var groupId = this.getAttribute('data-group-id');
+        var endpoint = 'community/like';
+        var button = this;
 
-//     $.ajax({
-//         type: 'POST',
-//         url: endpoint,
-//         data: {
-//             post_id : postId
-//         },
-//         success: function (response) {
-//             console.log(response['msg']);     
-//         }
-//     });
-//     });
-//   }
-// });
+        // 데이터 생성
+        var data = {
+          post_id: postId,
+          group_id: groupId
+        };
 
+        // Ajax 요청
+        $.ajax({
+          type: 'POST',
+          url: endpoint,
+          data: data,
+          success: function(response) {
+            // 서버 응답 처리
+            if (response.success) {
+              // 성공적으로 처리된 경우
 
-
-document.addEventListener('DOMContentLoaded', function() {
-  var likeButtons = document.getElementsByClassName('like');
-  for (var i = 0; i < likeButtons.length; i++) {
-    likeButtons[i].addEventListener('click', function() {
-      var postId = this.getAttribute('data-post-id');
-      var endpoint = 'community/like';
-      var currentCount = parseInt(this.querySelector('p').innerText);
-
-      var button = this;
-      button.classList.add('disabled');
-      
-      $.ajax({
-        type: 'POST',
-        url: endpoint,
-        data: {
-          post_id: postId
-        },
-        success: function(response) {
-          var newCount = currentCount + 1;
-          button.querySelector('p').innerText = newCount;
-          button.querySelector('i').classList.add('bi-heart-fill');
-          button.querySelector('i').classList.remove('bi-heart');
-        },
-        error: function() {
-          // button.classList.remove('disabled');
-        }
+              // 좋아요 버튼 상태 토글
+              var updatedIsLiked = response.is_liked;
+              if (updatedIsLiked) {
+                button.querySelector('i').classList.add('bi-heart-fill');
+                button.querySelector('i').classList.remove('bi-heart');
+              } else {
+                button.querySelector('i').classList.add('bi-heart');
+                button.querySelector('i').classList.remove('bi-heart-fill');
+              }
+              
+              // 좋아요 숫자 갱신
+              var likesCount = response.likes_count;
+              button.querySelector('p').innerText = likesCount;
+              $(this).find('p').text(likesCount);
+            } else {
+              // 처리 중 오류가 발생한 경우
+              console.log(response.error);
+            }
+          },
+          error: function(xhr, status, error) {
+            // Ajax 요청 오류 처리
+            console.log(error);
+          }
+        });
       });
-    });
-  }
-});
+    }
+  });
+  
+
 </script>

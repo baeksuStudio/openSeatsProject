@@ -287,7 +287,10 @@
           <a class="nav-link" id="pills-reviews-tab" data-bs-toggle="pill" data-bs-target="#pills-reviews" type="button" role="tab" aria-controls="pills-reviews" aria-selected="false">리뷰</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="pills-community-tab" data-bs-toggle="pill" data-bs-target="#pills-community" type="button" role="tab" aria-controls="pills-community" aria-selected="false">커뮤니티</a>
+          <a class="nav-link" id="pills-community-tab" data-bs-toggle="pill" data-bs-target="#pills-community" type="button" role="tab" aria-controls="pills-community" aria-selected="false">
+            커뮤니티
+            <span class="badge bg-secondary">{{ group.community_posts|length }}</span>
+          </a>
         </li>
         <!-- 그룹장일 경우 그룹관리 표시 -->
         {% if join_status == 'owner' %}
