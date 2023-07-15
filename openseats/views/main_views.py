@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort, request, flash, url_for, current_app
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import os
@@ -16,15 +16,25 @@ bp = Blueprint('main', __name__, url_prefix='/')
 def main_page() :
     return render_template('main.html')
 
+@bp.route('/canvas')
+def canvas_page() :
+    return render_template('canvas/canvas.html')
+@bp.route('/canvas2')
+def canvas_page2() :
+    return render_template('canvas/canvas2.html')
+@bp.route('/canvas3')
+def canvas_page3() :
+    return render_template('canvas/canvas3.html')
+
 
 @bp.route('/<string:username>')
 def my_page(username) :
     user = User.query.filter_by(userID=username).first()
-    reservations = Reservation.query.filter_by(user_id=user.id).all()
-    if user is None:
-        abort(404)
-    else :
+    if not user == None:
+        reservations = Reservation.query.filter_by(user_id=user.id).all()
         return render_template('mypage/mypage.html', user=user, reservations=reservations)
+    else:
+        abort(404)
 
 @bp.route('/<string:user_page>/edit', methods=('GET', 'POST'))
 @login_required
@@ -55,8 +65,8 @@ def my_page_edit(user_page) :
 
                             photo = form.photoUpload.data
                             if photo :
-                                filename = 'profile'
-                                path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
+                                filename = secure_filename(photo.filename)
+                                path = os.path.join(current_app.config['USER_PROFILE'], f'{user.id}.png')
                                 os.makedirs(os.path.dirname(path), exist_ok=True)
                                 photo.save(path)
                             db.session.commit()
@@ -70,13 +80,14 @@ def my_page_edit(user_page) :
 
                             photo = form.photoUpload.data
                             if photo :
-                                filename = 'profile.png'
-                                path = os.path.join(current_app.config['USER_PROFILE'],str(user.id),filename)
+                                filename = secure_filename(photo.filename)
+                                path = os.path.join(current_app.config['USER_PROFILE'], f'{user.id}.png')
                                 os.makedirs(os.path.dirname(path), exist_ok=True)
                                 photo.save(path)
+
                             db.session.commit()
                         
-                            return redirect(url_for('main.my_page', user_page=user.userID))
+                            return redirect(url_for('main.my_page', username=user.userID))
                     else :
                         flash('이미 존재하는 사용자 아이디 입니다.')
                 else :

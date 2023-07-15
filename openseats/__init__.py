@@ -24,7 +24,7 @@ def create_app() :
     # 파일 저장 경로 설정
     basedir = os.path.abspath(os.path.dirname(__file__))
     app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'uploads', 'img')
-    app.config['USER_PROFILE'] = os.path.join(basedir, 'static', 'img', 'profile')
+    app.config['USER_PROFILE'] = os.path.join(basedir, 'static', 'uploads', 'profile')
 
     # ORM
     db.init_app(app)
@@ -34,9 +34,10 @@ def create_app() :
 
 
     # Blueprint
-    from .views import main_views, group_views, auth_views
+    from .views import main_views, group_views, auth_views, feature_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(group_views.bp)
     app.register_blueprint(auth_views.bp)
+    app.register_blueprint(feature_views.bp)
 
     return app

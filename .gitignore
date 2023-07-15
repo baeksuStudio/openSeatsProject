@@ -1,11 +1,12 @@
-.idea
-openseats.db
+*.idea
+*.db
 *.pyc
 __pycache__
-migrations
+migrations/
 .env
 bin
 lib
+include
 uploads/
 profile/
 pyvenv.cfg

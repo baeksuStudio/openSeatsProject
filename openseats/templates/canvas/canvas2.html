@@ -1,0 +1,78 @@
+{% extends 'basic/base.html' %}
+{% block title %}Openseats - Main page{% endblock %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/batchGUI.css') }}">
+
+<script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
+<script type="module" src="{{ url_for('static', filename='/js/batch_canvas2.js') }}"></script>
+
+<script type="module" src="{{ url_for('static', filename='/js/canvas_sidebar.js') }}"></script>
+<div class="container-fluid">
+  <div class="row">
+    <div id="side-space" class="col-md-2">
+      <div class="mb-3"></div>
+      <div class="btn-toolbar justify-content-between d-flex" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm flex-grow-1" id="sidebar-header" role="group" aria-label="Basic radio toggle button group">
+          <div class="form-check form-switch form-switch">
+            <input class="form-check-input" id="preview-on/off" type="checkbox" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">배치 화면 미리보기 On/Off</label>
+          </div>
+        </div>
+      
+      </div>
+      
+
+      <div class="mb-3"></div>
+      <div class="btn-toolbar justify-content-between d-flex" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm flex-grow-1" id="sidebar-menu" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+          <label class="btn btn-outline-primary" for="btnradio1">만들기</label>
+      
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio2">수정하기</label>
+      
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio3">화면설정</label>
+        </div>
+      </div>
+      <div id="create-section" class="section">
+        {% include 'canvas/canvas-sidebar-create.html' %}
+      </div>
+      
+      <div id="edit-section" class="section">
+        {% include 'canvas/canvas-sidebar-edit.html' %}
+      </div>
+      
+      <div id="settings-section" class="section">
+        {% include 'canvas/canvas-sidebar-settings.html' %}
+      </div>
+
+      
+      <!-- Sidebar content here -->
+      <!-- You can add your sidebar elements inside this div -->
+    </div>
+    <div id="work-space" class="col-md-10">
+      <div class="btn-group btn-group-sm mb-3" role="group" aria-label="Single button group">
+
+      </div>
+      <!-- Konva canvas container -->
+      <div id="large-container">
+        <button type="button" id="sidebar-on-off" class="btn btn-outline-secondary me-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-layout-sidebar" viewBox="0 0 16 16">
+            <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H5zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2V2z"/>
+          </svg>
+        </button>
+        <img id="preview"/>
+        <div id="konva-canvas"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+<!-- hello -->
